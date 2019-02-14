@@ -10,20 +10,21 @@ public class Battle : MonoBehaviour {
 	
 	Character player;
 	Character enemy;
-	GameObject menu;
-	GameObject itemSpace;
-	GameObject specialMenu;
-	GameObject defenseMenu;
-	GameObject messageLog;
-	GameObject partyMenu;
-	GameObject winMenu;
-	GameObject recruitMember;
-	GameObject previousMessages;
-	GameObject useItemMenu;
-	GameObject audio;
-	GameObject sprites;
-	GameObject nameMenu;
-	GameObject statusBars;
+	public GameObject menu;
+	public GameObject itemSpace;
+	public GameObject specialMenu;
+	public GameObject defenseMenu;
+	public GameObject messageLog;
+	public GameObject partyMenu;
+	public GameObject winMenu;
+	public GameObject recruitMember;
+	public GameObject previousMessages;
+	public GameObject useItemMenu;
+	public GameObject audio;
+	public GameObject sprites;
+	public GameObject nameMenu;
+	public GameObject statusBars;
+	public GameObject largeMenuHides;
 	public int delay;
 	public Queue<TimedMethod> methodQueue;
 	Type t;
@@ -36,20 +37,20 @@ public class Battle : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//Debug.Log(Party.playerCount.ToString());
-		menu = gameObject.transform.Find("MenuSpace").gameObject;
-		itemSpace = gameObject.transform.Find("ItemSpace").gameObject;
-		specialMenu = gameObject.transform.Find("SpecialMenu").gameObject;
-		defenseMenu = gameObject.transform.Find("Defense Menu").gameObject;
-		messageLog = gameObject.transform.Find("Message Log").gameObject;
-		partyMenu = gameObject.transform.Find("Party Menu").gameObject;
-		winMenu = gameObject.transform.Find("Win Menu").gameObject;
-	    recruitMember = gameObject.transform.Find("Replace Member").gameObject;
-		previousMessages = gameObject.transform.Find("Previous Messages").gameObject;
-		useItemMenu = gameObject.transform.Find("Use Item Menu").gameObject;
-		audio = gameObject.transform.Find("Audio").gameObject;
-		sprites = gameObject.transform.Find("Character Sprites").gameObject;
-		nameMenu = gameObject.transform.Find("Name Menu").gameObject;
-		statusBars = gameObject.transform.Find("Status Bars").gameObject;
+		//menu = gameObject.transform.Find("MenuSpace").gameObject;
+		//itemSpace = gameObject.transform.Find("ItemSpace").gameObject;
+		//specialMenu = gameObject.transform.Find("SpecialMenu").gameObject;
+		//defenseMenu = gameObject.transform.Find("Defense Menu").gameObject;
+		//messageLog = gameObject.transform.Find("Message Log").gameObject;
+		//partyMenu = gameObject.transform.Find("Party Menu").gameObject;
+		//winMenu = gameObject.transform.Find("Win Menu").gameObject;
+	    //recruitMember = gameObject.transform.Find("Replace Member").gameObject;
+		//previousMessages = gameObject.transform.Find("Previous Messages").gameObject;
+		//useItemMenu = gameObject.transform.Find("Use Item Menu").gameObject;
+		//audio = gameObject.transform.Find("Audio").gameObject;
+		//sprites = gameObject.transform.Find("Character Sprites").gameObject;
+		//nameMenu = gameObject.transform.Find("Name Menu").gameObject;
+		//statusBars = gameObject.transform.Find("Status Bars").gameObject;
 		Party.latestRecruit = null;
 		delay = 0;
 		methodQueue = new Queue<TimedMethod>();
@@ -59,13 +60,14 @@ public class Battle : MonoBehaviour {
 		lastGuard = -1;
 		guardStrength = 5;
 		audio.GetComponent<GameAudio>().InitiateMusic();
+		ItemButton.inBattle = true;
 		//itemSpace.GetComponent<ItemSpace>().Check();
-		itemSpace.SetActive(false);
-		if (Party.area == "Overworld") {
-		    defenseMenu.gameObject.transform.Find("Run Button").gameObject.GetComponent<Button>().interactable = true;	
-		} else {
-			defenseMenu.gameObject.transform.Find("Run Button").gameObject.GetComponent<Button>().interactable = false;	
-		}
+		//itemSpace.SetActive(false);
+		//if (Party.area == "Overworld") {
+		//    defenseMenu.gameObject.transform.Find("Run Button").gameObject.GetComponent<Button>().interactable = true;	
+		//} else {
+		//	defenseMenu.gameObject.transform.Find("Run Button").gameObject.GetComponent<Button>().interactable = false;	
+		//}
 		Queue<TimedMethod> moves = Party.InitializePassives();
 		foreach (TimedMethod t in moves) {
 			methodQueue.Enqueue(t);
@@ -218,6 +220,7 @@ public class Battle : MonoBehaviour {
 		if (special.selects) {
 		    useItemMenu.SetActive(true);
 			specialMenu.SetActive(false);
+			largeMenuHides.SetActive(false);
 		    useItemMenu.GetComponent<PartyMenu>().currentSpecial = special;
 			usingSpecial = true;
 		} else {
@@ -233,14 +236,22 @@ public class Battle : MonoBehaviour {
 	}
 	
 	public void SupportSpecial (Special special, int index) {
-		TimedMethod[] specialMethods = special.UseSupport(index);
-		foreach (TimedMethod m in specialMethods) {
-		    methodQueue.Enqueue(m);
+	    if (special.selects) {
+		    useItemMenu.SetActive(true);
+			specialMenu.SetActive(false);
+			largeMenuHides.SetActive(false);
+		    useItemMenu.GetComponent<PartyMenu>().currentSpecial = special;
+			usingSpecial = true;
+		} else {
+	    	TimedMethod[] specialMethods = special.UseSupport(index);
+    		foreach (TimedMethod m in specialMethods) {
+		        methodQueue.Enqueue(m);
+		    }
+	    	menu.SetActive(false);
+    		methodQueue.Enqueue(new TimedMethod(2, "EndTurn"));
+		    Party.UseSP(special.GetCost());
+		    specialMenu.SetActive(false);
 		}
-		menu.SetActive(false);
-		methodQueue.Enqueue(new TimedMethod(2, "EndTurn"));
-		Party.UseSP(special.GetCost());
-		specialMenu.SetActive(false);
 	}
 	
 	public void SpecialSelects () {
@@ -253,6 +264,7 @@ public class Battle : MonoBehaviour {
 		methodQueue.Enqueue(new TimedMethod(2, "EndTurn"));
 		useItemMenu.GetComponent<PartyMenu>().currentSpecial = null;
 		useItemMenu.SetActive(false);
+		largeMenuHides.SetActive(true);
 	}
 	
 	public void Defense () {
@@ -340,7 +352,7 @@ public class Battle : MonoBehaviour {
 			Party.fullRecruit = enemy;
 			recruitMember.SetActive(true);
 			menu.SetActive(false);
-			statusBars.SetActive(false);
+			largeMenuHides.SetActive(false);
 			methodQueue.Enqueue(new TimedMethod("DisableLeadReplace"));
 		}
 	}
@@ -357,6 +369,7 @@ public class Battle : MonoBehaviour {
 	public void UseItem (Item item) {
 		if (item.selects) {
 		    useItemMenu.SetActive(true);
+			largeMenuHides.SetActive(false);
 		    useItemMenu.GetComponent<PartyMenu>().item = item;
 		} else {
 			string message = player.GetName() + " used " + item.GetName();
@@ -382,6 +395,7 @@ public class Battle : MonoBehaviour {
 		    itemSpace.SetActive(true);
 		}
 		useItemMenu.SetActive(false);
+		largeMenuHides.SetActive(true);
 		useItemMenu.GetComponent<PartyMenu>().item = null;
 		useItemMenu.GetComponent<PartyMenu>().currentSpecial = null;
 	}
@@ -404,12 +418,13 @@ public class Battle : MonoBehaviour {
 		methodQueue.Enqueue(new TimedMethod(2, "EndTurn"));
 		useItemMenu.GetComponent<PartyMenu>().item = null;
 		useItemMenu.SetActive(false);
+		largeMenuHides.SetActive(true);
 	}
 	
 	public void Cancel (string menu) {
 	    this.menu.SetActive(true);
 		gameObject.transform.Find(menu).gameObject.SetActive(false);
-		statusBars.SetActive(true);
+		largeMenuHides.SetActive(true);
 		messageLog.SendMessage("SetMessage", "");
 	}
 	
@@ -426,16 +441,18 @@ public class Battle : MonoBehaviour {
 	public void SwitchTo (int index) {
 		//StorePlayer();
 		//Party.playerSlot = index;
-		sprites.GetComponent<CharSprites>().Switch(Party.playerSlot - 1, index - 1);
-		Party.Switch(index, true);
-		GetPlayer();
-		methodQueue.Enqueue(new TimedMethod(60, "Log", new object[] {"Switched to " + player.ToString()}));
-		partyMenu.SetActive(false);
+		if (index != Party.playerSlot) {
+		    sprites.GetComponent<CharSprites>().Switch(Party.playerSlot - 1, index - 1);
+		    Party.Switch(index, true);
+		    GetPlayer();
+		    methodQueue.Enqueue(new TimedMethod(60, "Log", new object[] {"Switched to " + player.ToString()}));
 		//methodQueue.Enqueue(new TimedMethod(60,"EndTurn"));
-		menu.transform.Find("Attack Button").gameObject.GetComponent<Button>().interactable = true;
+		    menu.transform.Find("Attack Button").gameObject.GetComponent<Button>().interactable = true;
 		//menu.transform.Find("Special Button").gameObject.GetComponent<Button>().interactable = true;
-		menu.transform.Find("Item Button").gameObject.GetComponent<Button>().interactable = true;
-		menu.transform.Find("Defense Button").gameObject.GetComponent<Button>().interactable = true;
+		    menu.transform.Find("Item Button").gameObject.GetComponent<Button>().interactable = true;
+		    menu.transform.Find("Defense Button").gameObject.GetComponent<Button>().interactable = true;
+		}
+		partyMenu.SetActive(false);
 	}
 	
 	public void EnemySwitch(int a, int b) {
@@ -448,14 +465,13 @@ public class Battle : MonoBehaviour {
 		//StorePlayer();
 		partyMenu.SetActive(true);
 		menu.SetActive(false);
-		statusBars.SetActive(false);
+		largeMenuHides.SetActive(false);
 		messageLog.SendMessage("SetMessage", "");
 	}
 	
 	public void NextTurn (bool isEnemy) {
 		if (isEnemy) {
-			//bool passing = Party.GetEnemy().status.passing;
-			TimedMethod[] statuses;
+		   	TimedMethod[] statuses;
 			for (int i = 0; i < 4; i++) {
 				if (i == Party.enemySlot - 1) {
 					statuses = Party.enemies[i].status.CheckLead();
@@ -478,9 +494,10 @@ public class Battle : MonoBehaviour {
 			methodQueue.Enqueue(new TimedMethod(0, "NextTurn", new object[] {false}));
 		} else {
 			if (running) {
-				if (player.GetGooped() || player.GetAsleep() || player.GetStunned()) {
+				if (Party.GetPlayer().GetGooped() || Party.GetPlayer().GetAsleep() || Party.GetPlayer().GetStunned()) {
 				    messageLog.SendMessage("SetMessage", "You can't escape in this condition!");
 					delay += 60;
+					running = false;
 				} else {
 				    Flee();
 				    return;
@@ -532,12 +549,13 @@ public class Battle : MonoBehaviour {
 	}
 	
 	public void EndTurn () {
-		//menu.SetActive(false);
+		largeMenuHides.SetActive(true);
 		object[] args = new object[1];
 		args[0] = true;
 		methodQueue.Enqueue(new TimedMethod(0, "NextTurn", args));
 	}
 	
+	//Warning: Clears all methods from the queue
 	public void ContinueTurn () {
 		methodQueue.Clear();
 		menu.SetActive(true);
@@ -569,9 +587,9 @@ public class Battle : MonoBehaviour {
 	public void Freed () {
 		partyMenu.transform.Find("Switch").gameObject.GetComponent<Button>().interactable = true;
 		defenseMenu.transform.Find("Dodge Button").gameObject.GetComponent<Button>().interactable = true;
-		if (Party.area == "Overworld") {
-		    defenseMenu.transform.Find("Run Button").gameObject.GetComponent<Button>().interactable = true;
-		}
+		//if (Party.area == "Overworld") {
+		defenseMenu.transform.Find("Run Button").gameObject.GetComponent<Button>().interactable = true;
+		//}
 	}
 	
 	public void Skip () {
@@ -609,10 +627,9 @@ public class Battle : MonoBehaviour {
 		    methodQueue.Clear();
 			if (Party.fullRecruit != null) {
 				if (Party.playerCount == 4) {
-					Debug.Log("Full");
 				    recruitMember.SetActive(true);
 			        menu.SetActive(false);
-					statusBars.SetActive(false);
+					largeMenuHides.SetActive(false);
 			        methodQueue.Enqueue(new TimedMethod("DisableLeadReplace"));
 				    return;
 				} else {
@@ -623,7 +640,7 @@ public class Battle : MonoBehaviour {
 			//Debug.Log("None");
 		    messageLog.SendMessage("SetMessage", "");
 		    menu.SetActive(false);
-			statusBars.SetActive(true);
+			largeMenuHides.SetActive(true);
 		    winMenu.SetActive(true);
 		//}
 	}
@@ -643,6 +660,8 @@ public class Battle : MonoBehaviour {
 	}
 	
 	public void BattleEnd () {
+		ItemButton.inBattle = false;
+		Dungeon.fled = false;
 		Party.PostBattle();
 		SceneManager.LoadScene(Party.area);
 	}
@@ -652,6 +671,14 @@ public class Battle : MonoBehaviour {
 	}
 	
 	public void Flee () {
+		if (Party.area != "Overworld") {
+		    Dungeon.fled = true;
+			Dungeon.leftEnemies = new Character[4];
+			for (int i = 0; i < 4; i++) {
+				Dungeon.leftEnemies[i] = Party.enemies[i];
+			}
+		}
+		ItemButton.inBattle = false;
 		Party.PostBattle();
 		SceneManager.LoadScene(Party.area);
 	}

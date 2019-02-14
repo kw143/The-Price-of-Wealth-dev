@@ -1,6 +1,6 @@
 public class Milk : Item {
 	
-	public Milk() {name = "Milk"; description = "Restores 5 hp and cure poison"; selects = true; price = 2;}
+	public Milk() {name = "Milk"; description = "Restores 5 hp and cure poison"; selects = true; price = 2; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(5);

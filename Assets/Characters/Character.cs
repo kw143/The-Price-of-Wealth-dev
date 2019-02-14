@@ -81,7 +81,7 @@ public class Character {
 	public void SetBaseAccuracy (int baseAccuracy) {this.baseAccuracy = baseAccuracy;}
 	public int GetBaseAccuracy () {return baseAccuracy;}
 	public void SetAccuracy (int accuracy) {this.accuracy = accuracy;}
-	public int GetAccuracy () {return accuracy - status.blinded;}
+	public int GetAccuracy () {return accuracy + status.CoffeeEffect() - status.blinded;}
 	public void SetDexterity (int dexterity) {this.dexterity = dexterity;}
 	public int GetDexterity () {return dexterity;}
 	public void SetEvasion (int evasion) {this.evasion = evasion;}
@@ -134,12 +134,12 @@ public class Character {
 	public void GainCharge (int amount) {charge += amount;}
 	public void GainDefense(int amount) {defense += amount;}
 	public void GainGuard(int amount) {guard += amount;}
-	public void GainEvasion(int amount) {evasion = System.Math.Max(0, evasion + amount);}
+	public void GainEvasion(int amount) {if (!GetGooped() && !GetStunned() && !GetAsleep()) {evasion = System.Math.Max(0, evasion + amount);}}
 	public void GainDexterity (int amount) {dexterity += amount;}
 	public void GainMaxHP (int amount) {maxHP += amount; health = System.Math.Min(health, maxHP);}
 	public void GainAccuracy (int amount) {accuracy += amount;}
 	
-	public void DexCheck () {if (!GetAsleep() && !GetStunned() && !GetGooped()) {evasion += dexterity;}}
+	public void DexCheck () {if (!GetAsleep() && !GetStunned() && !GetGooped()) {evasion += System.Math.Max(0, dexterity + status.CoffeeEffect());}}
 	
 	public override string ToString() {
 		if (player) {
@@ -174,7 +174,7 @@ public class Character {
 			+ accuracy.ToString() + " Evasion: " + evasion.ToString() + " Dexterity: " + dexterity.ToString()
 			+ "\nTrait: " + quirk.GetName() + " - " + quirk.GetDescription() + "\n" + status.DescriptorText();
 		} else {
-			return quirk.GetName() + " " + name + ". This character is at 0 hp ";
+			return quirk.GetName() + " " + ToString() + ". This character is at 0 hp ";
 		}
 	}
 	

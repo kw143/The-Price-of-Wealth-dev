@@ -8,8 +8,10 @@ public class Item {
 	public bool selects;
 	//Number of items you must trade for this in the shop
 	public int price;
+	public bool usableOut;
 	
 	public Item() {
+		usableOut = false;
 		//price = 2;
 	}
 	

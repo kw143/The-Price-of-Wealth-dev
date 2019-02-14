@@ -27,8 +27,8 @@ public class Democracy : Passive {
 		} else {
 			advantage = Party.enemyCount - Party.playerCount;
 		}
-		self.SetCharge(self.GetCharge() + advantage);
-		self.SetGuard(self.GetGuard() + advantage);
+		self.GainCharge(advantage);
+		self.GainGuard(advantage);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
 			ToString() + " has an advantage of " + advantage.ToString()}), promisePart[0]};
 	}

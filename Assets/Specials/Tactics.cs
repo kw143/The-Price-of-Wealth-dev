@@ -4,7 +4,7 @@ public class Tactics : Special {
 	
 	public override TimedMethod[] UseSupport(int i) {
 		foreach (Character c in Party.members) {
-			if (c != null & c.GetAlive()) {
+			if (c != null && c.GetAlive()) {
 				c.GainAccuracy(2);
 				c.GainEvasion(4);
 			}

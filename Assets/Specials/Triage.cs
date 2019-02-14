@@ -1,23 +1,22 @@
 public class Triage : Special {
 	
-	public Triage () {name = "Triage"; description = "Restore all party members to 1/2 hp, including unconscious ones"; baseCost = 20; modifier = 0;}
+	public Triage () {name = "Triage"; description = "Restore or revive a party member to 1/2 max hp"; baseCost = 8; modifier = 0;
+	    useDead = true; selects = true;}
 	
-	public override TimedMethod[] Use () {
-		foreach (Character c in Party.members) {
-			if (c != null) {
-				if (!c.GetAlive()) {
+	public override TimedMethod[] UseSelects (int i) {
+			if (Party.members[i] != null) {
+				if (!Party.members[i].GetAlive()) {
 					Party.playerCount++;
-				    c.SetAlive(true);
+				    Party.members[i].SetAlive(true);
 				}
-				c.SetHealth(System.Math.Max(c.GetHealth(), c.GetMaxHP() / 2));
+				Party.members[i].SetHealth(System.Math.Max(Party.members[i].GetHealth(), Party.members[i].GetMaxHP() / 2));
 			}
-		}
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
-		    new TimedMethod(60, "Log", new object[] {Party.GetPlayer().ToString() + " used all resources to heal"})};
+		    new TimedMethod(60, "Log", new object[] {Party.GetPlayer().ToString() + " performed tiring healing"})};
 	}
 	
-	public override void UseOutOfCombat () {
-		Party.UseSP(GetCost());
-		Use();
-	}
+	//public override void UseOutOfCombat () {
+		//Party.UseSP(GetCost());
+		//Use();
+	//}
 }

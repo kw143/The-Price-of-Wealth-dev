@@ -11,6 +11,7 @@ public class Shop : MonoBehaviour {
 	public GameObject replaceMember;
 	public GameObject productPrefab;
 	public GameObject hirelingPrefab;
+	public Text SPAmount;
 	bool resting;
 	public Item purchase;
 	Character hireling;
@@ -18,10 +19,10 @@ public class Shop : MonoBehaviour {
 	
 	
 	// Use this for initialization
-	int yPosition = 75;
-	GameObject current;
-	Vector3 pos;
 	void Start () {
+		int yPosition = 50;
+	    GameObject current;
+	    Vector3 pos;
 		inventory = Areas.currentShop;
 		foreach (Item item in inventory.products) {
 		    current = Instantiate(productPrefab, gameObject.transform.Find("StoreUI"));
@@ -30,7 +31,7 @@ public class Shop : MonoBehaviour {
 			yPosition -= 35;
 			current.GetComponent<Product>().SetItem(item);
 		}
-		yPosition = 75;
+		yPosition = 50;
 		foreach (Character hireling in inventory.hirelings) {
 			current = Instantiate(hirelingPrefab, gameObject.transform.Find("StoreUI"));
 			pos = new Vector3(50, yPosition, 0);
@@ -38,6 +39,7 @@ public class Shop : MonoBehaviour {
 			yPosition -= 35;
 			current.GetComponent<Hireling>().SetCharacter(hireling);
 		}
+		SPAmount.text = "SP: " + Party.GetSP().ToString();
 	}
 	
 	public void UpdateUI () {
@@ -46,6 +48,9 @@ public class Shop : MonoBehaviour {
 			    Destroy(child.gameObject);
 		    }
 		}
+		int yPosition = 50;
+	    GameObject current;
+	    Vector3 pos;
 		foreach (Item item in inventory.products) {
 		    current = Instantiate(productPrefab, gameObject.transform.Find("StoreUI"));
 			pos = new Vector3(250, yPosition, 0);
@@ -61,6 +66,7 @@ public class Shop : MonoBehaviour {
 			yPosition -= 35;
 			current.GetComponent<Hireling>().SetCharacter(hireling);
 		}
+		SPAmount.text = "SP: " + Party.GetSP().ToString();
 	}
 	
 	// Update is called once per frame
@@ -83,6 +89,7 @@ public class Shop : MonoBehaviour {
 		tradeItems.SetActive(false);
 		replaceMember.SetActive(false);
 		storeUI.SetActive(true);
+		messageLog.GetComponent<Text>().text = "";
 	}
 	
 	public void Hire(Character hireling) {
@@ -99,13 +106,21 @@ public class Shop : MonoBehaviour {
 		}
 	}
 	
+	public void CancelHire() {
+		Party.UseSP(-10);
+		Party.fullRecruit = null;
+		replaceMember.SetActive(false);
+		storeUI.SetActive(true);
+	}
+	
 	public void Scout() {
 		if (Party.GetSP() >= 5) {
 			Party.UseSP(5);
-			messageLog.GetComponent<Text>().text = "You scouted an area but it wasn't coded yet";
+			messageLog.GetComponent<Text>().text = inventory.scoutMessage;
 		} else {
 			messageLog.GetComponent<Text>().text = "You are broke!";
 		}
+		UpdateUI();
 	}
 	
 	public void Rest() {
@@ -119,6 +134,7 @@ public class Shop : MonoBehaviour {
 				if (c != null) {
 				    c.Heal(10);
 				}
+				messageLog.GetComponent<Text>().text = "Party healed 10 hp";
 			}
 		} else {
 			inventory.RemoveP(purchase);

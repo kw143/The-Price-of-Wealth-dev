@@ -113,12 +113,14 @@ public class PartyMenu : MonoBehaviour {
 		    if (i == Party.playerSlot || i >= 5) {
 	    		swap.interactable = false;
     		} else {
-			    if (Party.GetCharacter(i-1).GetAlive()) {	
+			    if (Party.members[i-1].GetAlive() && Party.members[i - 1].status.possessed == 0 && Party.members[i - 1].status.gooped == false) {	
 		    	    swap.interactable = true;
 	    		} else {
     				swap.interactable = false;
 			    }
 		    }
+		} else if (currentSpecial != null && !currentSpecial.useDead && !Party.members[i-1].GetAlive()) {
+			swap.interactable = false;
 		} else {
 			swap.interactable = true;
 		}
@@ -174,6 +176,10 @@ public class PartyMenu : MonoBehaviour {
 		StandardS.gameObject.SetActive(false);
 		SupportS.gameObject.SetActive(false);
 		CloseParty();
+	}
+	
+	public void RejectNewcomer() {
+		Party.fullRecruit = null;
 	}
 	
 	public void CloseParty() {

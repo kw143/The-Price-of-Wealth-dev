@@ -1,6 +1,6 @@
 public class MegaCurry : Item {
 	
-	public MegaCurry() {name = "Mega Curry"; description = "Restores 15 hp. You gain 20 charge"; selects = true; price = 11;}
+	public MegaCurry() {name = "Mega Curry"; description = "Restores 15 hp. You gain 20 charge"; selects = true; price = 11; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);

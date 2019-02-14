@@ -63,7 +63,7 @@ public class CSMajor : Character {
 		return dropped;
 	}
 	
-	public virtual void PostBattle() {
+	public override void PostBattle() {
 		attacks = 0; power = 0; charge = 0; defense = 0; guard = 0; evasion = 0; accuracy = baseAccuracy; status.PostBattle();
 	}
 	

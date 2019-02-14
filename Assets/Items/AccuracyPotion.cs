@@ -2,7 +2,7 @@ public class AccuracyPotion : Item {
 	
 	public AccuracyPotion() {
     	name = "Accuracy Potion"; description = "+1 Accuracy. Wouldn't it be great if Tristan remembered anything from Chem to name this right?";
-	    selects = true; price = 11;
+	    selects = true; price = 11; usableOut = true;
 	}
 	
 	public override TimedMethod[] UseSelected(int i) {

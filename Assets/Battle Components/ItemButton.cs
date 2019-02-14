@@ -11,6 +11,7 @@ public class ItemButton : MonoBehaviour {
 	public static int startingY = 50;
 	public static int y = 50;
 	public static int stepY = 25;
+	public static bool inBattle;
 	public GameObject messageLog;
 	
 	public ItemButton(Item item) {this.item = item;}
@@ -28,6 +29,11 @@ public class ItemButton : MonoBehaviour {
 		} catch {
 			messageLog = null;
 		}
+		if (!inBattle & !item.usableOut) {
+			gameObject.GetComponent<Button>().interactable = false;
+		} else {
+			gameObject.GetComponent<Button>().interactable = true;
+		}		
 	}
 	
 	// Update is called once per frame

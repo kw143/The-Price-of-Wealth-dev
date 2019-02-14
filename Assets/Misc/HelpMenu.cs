@@ -15,14 +15,16 @@ public class HelpMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		textArray = new string[] {
-		"Story\n\nCurrently unnamed villain has possessed the country through money\n" +
+		"Welcome to The Price of Wealth\n\nStory\nCurrently unnamed villain has possessed the country through money\n" +
 		"As a broke college student, you were unaffected by the curse\n" +
-		"You must assemble a team and collect gear to defeat the villain and his 3 subordinates to destroy the source of the possession" +
-		"That's it!",
+		"You must assemble a team and collect gear to defeat the villain and his 3 subordinates to destroy the source of the possession\n" +
+		"First you will want to build your team and gather supplies in your starting location\n" +
+		"That's it! (if this is your first time, you should read the rest of this menu)",
 		
 		"Stats\n\nStrength: Permanent attack power\nPower: Attack power that lasts for the battle\nCharge: Attack power that lasts for 1 attack\n" +
 		"Defense: Defense power that lasts for the battle\nGuard: Defense power that lasts for 1 attack\n" +
-		"Accuracy: Character's attack will miss if it isn't higher than the target's Evasion\n" + 
+		"Accuracy: Character's attack will miss if it isn't higher than the target's Evasion\n" +
+		"Evasion: Decreases by the attacker's accuracy when the character dodges\n" + 
 		"Dexterity: Evasion increases by this number when the character fails to dodge a move\n",
 		
 		"Status Conditions\n\nAsleep: Character can not take actions until awoken (randomly or through damage)\n" +

@@ -28,7 +28,7 @@ public class Doctor : Character {
 			}
 		}
 		if (Party.enemies[index].GetAlive()) {
-			Party.enemies[index].Heal(10);
+			Party.enemies[index].Heal(5);
 			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " treated " + Party.enemies[index].ToString()})};
 		} else {

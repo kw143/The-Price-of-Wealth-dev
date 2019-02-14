@@ -1,7 +1,7 @@
 public class Exam : Item {
 	
 	public Exam () {
-		name = "Exam"; description = "Whoever writes their name on this exam will feel Serene"; price = 11;
+		name = "Exam"; description = "Whoever writes their name on this exam will feel Serene"; price = 11; usableOut = true;
 	}
 	
 	public override TimedMethod[] Use () {

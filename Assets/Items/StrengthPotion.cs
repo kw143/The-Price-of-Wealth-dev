@@ -2,7 +2,7 @@ public class StrengthPotion : Item {
 	
 	public StrengthPotion() {
     	name = "Strength Potion"; description = "+1 Strength. Wouldn't it be great if Tristan remembered anything from Chem to name this right?";
-	    selects = true; price = 11;
+	    selects = true; price = 11; usableOut = true;
 	}
 	
 	public override TimedMethod[] UseSelected(int i) {

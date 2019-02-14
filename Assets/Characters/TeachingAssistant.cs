@@ -27,9 +27,11 @@ public class TeachingAssistant : Character {
 	public TimedMethod[] Grade () {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    Party.UseSP(3);
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " returned grades. -3 SP"})};
 		}
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " returned grades. -3 SP"})};
+		    new TimedMethod(60, "Log", new object[] {ToString() + " returned grades, but " + Party.GetPlayer().ToString() + " didn't care"})};
 	}
 	
 	public TimedMethod[] Laziness () {

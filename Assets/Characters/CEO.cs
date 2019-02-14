@@ -1,10 +1,10 @@
 public class CEO : Character {
 	
-	int cycle;
+	protected int cycle;
 	int summonCount;
-	int monopoly;
-	bool horiz;
-	bool vert;
+	protected int monopoly;
+	protected bool horiz;
+	protected bool vert;
 	
 	
 	public CEO () {

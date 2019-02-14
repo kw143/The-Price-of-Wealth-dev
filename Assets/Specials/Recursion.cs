@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class Recursion : Special {
 	
 	public Recursion () {name = "Recursion"; description = "Attack once for every basic attack this character used this combat";

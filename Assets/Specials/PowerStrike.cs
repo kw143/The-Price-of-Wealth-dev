@@ -8,7 +8,7 @@ public class PowerStrike : Special {
 			    true, Party.GetPlayer().GetStrength() + 2, Party.GetPlayer().GetStrength() + 2, Party.GetPlayer().GetAccuracy(), true, true, false})};
 		} else {
 	    	return new TimedMethod[] {new TimedMethod(0, "StagnantAttack", new object[] {
-			    true, Party.GetPlayer().GetStrength() + 4, Party.GetPlayer().GetStrength() + 4, Party.GetPlayer().GetAccuracy(), true, true, false})};
+			    true, Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetAccuracy(), true, true, false})};
 		}
 	}
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EventGetter : MonoBehaviour {
     public static Event beforeBoss;
+	public static Event beforeFinal;
 	
 	//tower
 	public static Event representative;
@@ -105,6 +106,7 @@ public class EventGetter : MonoBehaviour {
 	public static Event politician;
 	public static Event general;
 	public static Event ceo;
+	public static Event finalBoss;
 	
 	//extras
 	public static Event coachAndOther;
@@ -135,6 +137,8 @@ public class EventGetter : MonoBehaviour {
 	public static void BeginGame() {
 		//Bosses
 		beforeBoss = new TextEvent("The next room is the deepest part of the building. Whatever controls this place lies ahead");
+		beforeFinal = new TextEvent("A great evil emanates from the next room. Beware");
+		finalBoss = new BattleEvent(new Character[] {new Villain()}, "The final boss is here");
 		ceo = new BattleEvent(new Character[] {new CEO()}, "It's the CEO");
 		general = new BattleEvent(new Character[] {new General()}, "It's the general");
 		politician = new BattleEvent(new Character[] {new Politician()}, "It's the politician");
@@ -404,17 +408,46 @@ public class EventGetter : MonoBehaviour {
 	public static void PlaceBosses(Event[] first, Event[] second, Event[] third, Event[] fourth,
     	Event[] fifth, Event[] sixth, Event[] seventh) {
 		
+		HashSet<int> available = new HashSet<int>(new int[] {0, 1, 2, 3, 4, 5, 6});
 		System.Random rng = new System.Random();
 		int index;
 		List<Event[]> areas = new List<Event[]>();
 		areas.Add(first); areas.Add(second); areas.Add(third); areas.Add(fourth); areas.Add(fifth); areas.Add(sixth); areas.Add(seventh);
+		int[] mappedIndexes = new int[] {0, 1, 2, 3, 4, 5, 6};
 		index = rng.Next(7);
+		available.Remove(index);
+		//Debug.Log(index.ToString());
+		Areas.bossLocations.Add(index);
 		areas[index][8] = politician;
 		areas[index] = areas[6];
+		mappedIndexes[index] = 6;
 		index = rng.Next(6);
+		available.Remove(mappedIndexes[index]);
+		//Debug.Log(mappedIndexes[index].ToString());
+		Areas.bossLocations.Add(mappedIndexes[index]);
 		areas[index][8] = ceo;
 		areas[index] = areas[5];
+		mappedIndexes[index] = mappedIndexes[5];
 		index = rng.Next(5);
+		available.Remove(mappedIndexes[index]);
+		//Debug.Log(mappedIndexes[index].ToString());
+		Areas.bossLocations.Add(mappedIndexes[index]);
 		areas[index][8] = general;
+		areas[index] = areas[4];
+		mappedIndexes[index] = mappedIndexes[4];
+		index = rng.Next(4);
+		available.Remove(mappedIndexes[index]);
+		//Debug.Log(mappedIndexes[index].ToString());
+		Areas.bossLocations.Add(mappedIndexes[index]);
+		areas[index][8] = finalBoss;
+		areas[index][7] = beforeFinal;
+		int[] availableArray = new int[3];
+		available.CopyTo(availableArray);
+		foreach (int i in availableArray) {
+			Areas.bossLocations.Add(i);
+		}
+		int starting = availableArray[rng.Next(3)];
+		areas[starting][0] = new InitialRecruit();
+		Areas.SetLocation(starting);
 	}
 }

@@ -9,6 +9,6 @@ public class Handcuffs : Special {
 		} else {
 			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Miss"})};
 		}
-		return new TimedMethod[] {new TimedMethod(30, "SwitchTo", new object[] {i}), goopPart[0]};
+		return new TimedMethod[] {new TimedMethod(30, "SwitchTo", new object[] {i + 1}), goopPart[0]};
 	}
 }

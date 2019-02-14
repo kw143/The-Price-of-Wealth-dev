@@ -1,7 +1,6 @@
 public class Armored : Passive {
 	
     int formerHP;
-	bool usedArmor;
 	
 	public Armored (Character c) {
 		self = c; name = "Armored";
@@ -10,7 +9,6 @@ public class Armored : Passive {
 	}
 	
 	public override TimedMethod[] CheckLead (bool player) {
-		if (!usedArmor) {self.SetDefense(self.GetDefense() + 1); usedArmor = true;}
 		if (self.GetHealth() >= formerHP) {
 			self.SetGuard(self.GetGuard() + 1);
 			formerHP = self.GetHealth();
@@ -21,8 +19,8 @@ public class Armored : Passive {
 	}
 	
 	public override TimedMethod[] Initialize (bool player) {
-		usedArmor = false;
 		formerHP = System.Int32.MaxValue;
+		self.GainDefense(1);
 		return new TimedMethod[0];
 	}
 	

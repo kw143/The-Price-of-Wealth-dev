@@ -119,7 +119,11 @@ public class Villain : Character {
 	}
 	
 	public TimedMethod[] Hypnotize() {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"This method doesn't work yet"})};
+	    if (Attacks.EvasionCycle(GetAccuracy() * 2, Party.GetPlayer())) {
+			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Villain activated the evil device"}), 
+			Party.GetPlayer().status.Possess()[0], new TimedMethod(0, "SwitchTo", new object[] {1})};
+	    }
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Villain activated the evil device and you dodged its nature"})};
 	}
 	
 	public TimedMethod[] Switch() {

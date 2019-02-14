@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour {
     
 	public GameObject start;
 	public GameObject selectCharacter;
+	public GameObject enterName;
+	
 	// Use this for initialization
 	void Start () {
 		
@@ -39,7 +42,7 @@ public class GameOver : MonoBehaviour {
 			Party.SetItems(new Item[] {new Flask(), new Flask(), new ToxicSolution(), new MysteryGoo(), new MysteryGoo(), null, null, null, null, null});
 		} else if (seed == 2) {
 			c = new MusicMajor();
-			c.SetChampion(true); c.SetStrength(4); c.SetMaxHP(30); c.SetHealth(30); c.SetQuirk(new Overconfident(c));
+			c.SetChampion(true); c.SetStrength(4); c.SetMaxHP(30); c.SetHealth(30); c.SetQuirk(new Bandwagon(c));
 			Party.AddPlayer(c);
 			Party.SetItems(new Item[] {new Tuba(), new Smartphone(), new Donut(), new Wire(), new Heels(), null, null, null, null, null});
 		} else if (seed == 3) {
@@ -74,16 +77,29 @@ public class GameOver : MonoBehaviour {
 			Party.SetItems(new Item[] {new Pendulum(), new Tuba(), new Textbook(), new Rice(), new Milk(), null, null, null, null, null});
 		} else {
 			c = new MechanicalEngineer();
-			c.SetChampion(true); c.SetStrength(4); c.SetMaxHP(35); c.SetHealth(35); c.SetQuirk(new Bandwagon(c));
+			c.SetChampion(true); c.SetStrength(4); c.SetMaxHP(35); c.SetHealth(35); c.SetQuirk(new Overconfident(c));
 			Party.AddPlayer(c);
 			Party.SetItems(new Item[] {new Smartphone(), new Calculator(), new Pizza(), new Oil(), new Shuttle(), null, null, null, null, null});
 		}
-		Areas.Initialize();
-		SceneManager.LoadScene("Overworld");
+		ToName();
 	}
 	
 	public void ToSelect () {
 		selectCharacter.SetActive(true);
 		start.SetActive(false);
+	}
+	
+	public void ToName () {
+		selectCharacter.SetActive(false);
+		enterName.SetActive(true);
+	}
+	
+	public void Name () {
+		Party.GetPlayer().SetName(enterName.transform.Find("Text").gameObject.GetComponent<Text>().text);
+	}
+	
+	public void CreateGame () {
+		Areas.Initialize();
+		SceneManager.LoadScene("Overworld");
 	}
 }

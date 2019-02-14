@@ -2,7 +2,7 @@ public class Baton : Item {
 	
 	public Baton () {
 		name = "Baton"; description = "Turns a music major's passive into Directive, causing party to rotate each turn. Use out of combat";
-		price = 4;
+		price = 4; usableOut = true;
 	}
 	
 	public override TimedMethod[] Use () {

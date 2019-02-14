@@ -1,6 +1,6 @@
 public class Meatloaf : Item {
 	
-	public Meatloaf() {name = "Meatloaf"; description = "Restores 15 hp. You gain 5 power"; selects = true; price = 11;}
+	public Meatloaf() {name = "Meatloaf"; description = "Restores 15 hp. You gain 5 power"; selects = true; price = 11; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);

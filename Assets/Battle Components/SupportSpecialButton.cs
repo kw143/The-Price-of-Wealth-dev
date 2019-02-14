@@ -19,7 +19,7 @@ public class SupportSpecialButton : MonoBehaviour {
 		    gameObject.GetComponentInChildren<Text>().text = current.GetName();
 	    	special = current;
     		if (Party.GetSP() < current.GetCost() || !Party.members[index].GetAlive() || Party.members[index].status.stunned > 0 
-			    || Party.members[index].status.asleep > 0) {
+			    || Party.members[index].status.asleep > 0 || Party.members[index].status.possessed > 0) {
 			    gameObject.GetComponent<Button>().interactable = false;
 		    } else {
 	    		gameObject.GetComponent<Button>().interactable = true;

@@ -11,17 +11,17 @@ public class Charge : Special {
 			for (int i = 0; i < 4; i++) {
 				if (i != Party.enemySlot - 1 && Party.enemies[i] != null && Party.enemies[i].GetAlive()) {
 					moves[index] = new TimedMethod(0, "AttackAny", new object[] {Party.GetPlayer(), Party.enemies[i],
-			    	Party.GetPlayer().GetStrength()/2, (Party.GetPlayer().GetStrength() + 5)/2, Party.GetPlayer().GetAccuracy(), true, true, false});
+			    	Party.GetPlayer().GetStrength()/2, (Party.GetPlayer().GetStrength() + 5)/2, Party.GetPlayer().GetAccuracy(), true, false, false});
 					//break;
-				}
 				index++;
+				}
 			}
-			moves[index] = new TimedMethod(60, "StagnantAttack", new object[] {
-		        true, Party.GetPlayer().GetStrength(), Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetAccuracy(), true, false, false});
+			moves[index] = new TimedMethod(0, "StagnantAttack", new object[] {
+		        true, Party.GetPlayer().GetStrength(), Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetAccuracy(), true, true, false});
 		    return moves;
 		} else {
-			return new TimedMethod[] {new TimedMethod(60, "StagnantAttack", new object[] {
-		        true, Party.GetPlayer().GetStrength(), Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetAccuracy(), true, false, false})};
+			return new TimedMethod[] {new TimedMethod(0, "StagnantAttack", new object[] {
+		        true, Party.GetPlayer().GetStrength(), Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetAccuracy(), true, true, false})};
 		}
 	}
 }

@@ -19,18 +19,25 @@ public class Dungeon : MonoBehaviour {
 	public GameObject bagMenu;
 	public GameObject useItemMenu;
 	public GameObject nameMenu;
+	public GameObject dungeonMaps;
 	public bool isEvent;
     public int y;
 	public int partyIndex;
+	public static bool fled;
+	public static Character[] leftEnemies;
 	Type t;
 	MethodInfo method;
 	public Queue<TimedMethod> effects1;
 	public Queue<TimedMethod> effects2;
 	public Queue<TimedMethod> effects3;
 	public Queue<TimedMethod> effects4;
-
+	
 	// Use this for initialization
 	void Start () {
+		if (fled && Party.area != "overworld") {
+			fled = false;
+			EscapeEnemies();
+		}
 		effects1 = new Queue<TimedMethod>();
 		effects2 = new Queue<TimedMethod>();
 		effects3 = new Queue<TimedMethod>();
@@ -41,11 +48,24 @@ public class Dungeon : MonoBehaviour {
 			Areas.followUp = null;
 			Next();
 		}
+		string loc = Areas.location;
+		foreach (Transform current in dungeonMaps.gameObject.transform) {
+			if (current.gameObject.name == loc || current.gameObject.name == "EdgeSpace") {
+				current.gameObject.SetActive(true);
+			} else {
+				current.gameObject.SetActive(false);
+			}
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+	
+	public void RunEvent(Event current) {
+		consequence = current;
+		Next();
 	}
 	
 	public void Next () {
@@ -55,8 +75,7 @@ public class Dungeon : MonoBehaviour {
 			//return;
 		//}
 		if (consequence == null) {
-		    current = Areas.Next();
-			if (current == null) {return;}
+		    return;
 		} else {
 			current = consequence;
 			consequence = null;
@@ -110,6 +129,7 @@ public class Dungeon : MonoBehaviour {
 		//nextMenu.SetActive(false);
 		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = false;
 		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = false;
+		dungeonMaps.SetActive(false);
 		isEvent = true;
 		eventSpace.SetActive(true);
 	}
@@ -118,14 +138,35 @@ public class Dungeon : MonoBehaviour {
 		//nextMenu.SetActive(true);
 		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = true;
 		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = true;
+		dungeonMaps.SetActive(true);
 		isEvent = false;
 		eventSpace.SetActive(false);
+	}
+	
+	public void Escape () {
+		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = true;
+		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = true;
+		dungeonMaps.SetActive(true);
+		isEvent = false;
+		eventSpace.SetActive(false);
+		dungeonMaps.transform.Find(Areas.location).GetComponent<MapViewer>().Escape();
+	}
+	
+	public void EscapeEnemies () {
+		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = true;
+		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = true;
+		dungeonMaps.SetActive(true);
+		isEvent = false;
+		eventSpace.SetActive(false);
+		dungeonMaps.transform.Find(Areas.location).GetComponent<MapViewer>().EscapeEnemies(leftEnemies);
+		//leftEnemies = null;
 	}
 	
 	public void OpenParty() {
 	    nextMenu.SetActive(false);
 		eventSpace.SetActive(false);
         partyMenu.SetActive(true);		
+		dungeonMaps.SetActive(false);
 	}
 	
 	public void CloseParty() {
@@ -133,6 +174,8 @@ public class Dungeon : MonoBehaviour {
 		nextMenu.SetActive(true);
 		if (isEvent) {
 			eventSpace.SetActive(true);
+		} else {
+			dungeonMaps.SetActive(true);
 		}
 	}
 	
@@ -222,6 +265,7 @@ public class Dungeon : MonoBehaviour {
 		nextMenu.SetActive(true);
 		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = true;
 		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = true;
+		dungeonMaps.SetActive(true);
 		isEvent = false;
 	}
 	
@@ -229,6 +273,7 @@ public class Dungeon : MonoBehaviour {
 		bagMenu.SetActive(true);
 		nextMenu.SetActive(false);
 		eventSpace.SetActive(false);
+		dungeonMaps.SetActive(false);
 	}
 	
 	public void CloseBag () {
@@ -236,6 +281,8 @@ public class Dungeon : MonoBehaviour {
 		nextMenu.SetActive(true);
 		if (isEvent) {
 			eventSpace.SetActive(true);
+		} else {
+			dungeonMaps.SetActive(true);
 		}
 	}
 	
@@ -258,6 +305,8 @@ public class Dungeon : MonoBehaviour {
 		useItemMenu.GetComponent<PartyMenu>().item = null;
 		if (isEvent) {
 			eventSpace.SetActive(true);
+		} else {
+			dungeonMaps.SetActive(true);
 		}
 	}
 	
@@ -275,6 +324,8 @@ public class Dungeon : MonoBehaviour {
 		nameMenu.SetActive(false);
 		if (isEvent) {
 			eventSpace.SetActive(true);
+		} else {
+			dungeonMaps.SetActive(true);
 		}
 	}
 	
@@ -338,6 +389,15 @@ public class Dungeon : MonoBehaviour {
 		m.Invoke(Party.members[partyIndex], new object[] {amount});
 	}
 	
+	public void StatusChange (string method, int degree) {
+		MethodInfo m = Party.members[partyIndex].status.GetType().GetMethod(method);
+		if (degree == null) {
+			m.Invoke(Party.members[partyIndex].status, new object[] {null});
+		} else {
+		    m.Invoke(Party.members[partyIndex].status, new object[] {degree});
+		}
+	}
+	
 	public void Ally (Character[] recruits) {
 		foreach (Character c in recruits) {
 			Party.AddPlayer(c);
@@ -345,11 +405,15 @@ public class Dungeon : MonoBehaviour {
 		Resolve();
 	}
 	
-	public void Shortcut (int number) {
-		for (int i = 1; i <= number; i++) {
-			Areas.Next();
-		}
+	public void SpendTime (int amount) {
+		Time.Increment(amount);
 	}
+	
+	//public void Shortcut (int number) {
+		//for (int i = 1; i <= number; i++) {
+			//Areas.Next();
+		//}
+	//}
 	
 	public void Exit () {
 		SceneManager.LoadScene("Overworld");

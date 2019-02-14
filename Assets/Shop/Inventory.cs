@@ -4,6 +4,7 @@ public class Inventory {
 	
 	public Item[] products;
 	public Character[] hirelings;
+	public string scoutMessage;
 	static System.Random rng = new System.Random();
 	
 	public Inventory(Item[] products, Character[] hirelings) {

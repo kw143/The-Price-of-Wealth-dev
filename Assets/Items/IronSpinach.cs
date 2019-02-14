@@ -1,6 +1,6 @@
 public class IronSpinach : Item {
 	
-	public IronSpinach() {name = "Iron Spinach"; description = "Restores 15 hp. You gain 5 defense"; selects = true; price = 11;}
+	public IronSpinach() {name = "Iron Spinach"; description = "Restores 15 hp. You gain 5 defense"; selects = true; price = 11; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);

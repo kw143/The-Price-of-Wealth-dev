@@ -5,7 +5,7 @@ public class PaperPlane : Item {
 	public override TimedMethod[] Use () {
 		TimedMethod[] blindPart;
 		if (Party.GetPlayer().GetAccuracy() > Party.GetEnemy().GetEvasion()) {
-			blindPart = Party.GetEnemy().status.Blind(5);
+			blindPart = Party.GetEnemy().status.Blind(7);
 		} else {
 			blindPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
 		}

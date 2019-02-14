@@ -1,6 +1,6 @@
 public class Celery : Item {
 	
-	public Celery() {name = "Celery"; description = "Restores 5 hp. You gain 1 defense"; selects = true; price = 2;}
+	public Celery() {name = "Celery"; description = "Restores 5 hp. You gain 1 defense"; selects = true; price = 2; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(5);

@@ -65,6 +65,24 @@ public static class Party {
 		return false;
 	}
 	
+	public static int PartyContains (Character type) {
+	    for (int i = 0; i < 4; i++) {
+			if (members[i] != null && members[i].GetType().Equals(type.GetType())) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static int ContainsQuirk (Passive type) {
+		for (int i = 0; i < 4; i++) {
+			if (members[i] != null && members[i].GetQuirk().GetType().Equals(type.GetType())) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	public static TimedMethod[] StealItem () {
 		if (BagContains(new Briefcase())) {return new TimedMethod[] {new TimedMethod(60, "Log", new object[]{"A briefcase prevents theft"})};}
 		List<int> indexes = new List<int>();
@@ -216,12 +234,28 @@ public static class Party {
 	
 	public static TimedMethod[] CheckDeath() {
 		for (int i = 0; i < 4; i++) {
-			if (i != playerSlot - 1 && members[i] != null && members[i].GetHealth() <= 0 && members[i].GetAlive()) {
+			if ((i != playerSlot - 1) && (members[i] != null) && (members[i].GetHealth() <= 0) && members[i].GetAlive()) {
 				members[i].SetAlive(false);
 				playerCount--;
 				members[i].GetPassive().Deactivate(true);
+				if (members[i].GetChampion()) {
+					if (BagContains(new Defibrilator()) && playerCount > 0) {
+				        for (int j = 0; j < 10; i++) {
+				    		if (items[j] != null && items[j].GetType().Equals(new Defibrilator().GetType())) {
+				                items[j] = null;
+						    	break;
+		                   	}
+				    	}
+					    members[i].SetAlive(true);
+					    members[i].Heal(1);
+					    playerCount++;
+					    //return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Your teammates used the defibrilator"})};
+				    } else {
+    				    return new TimedMethod[] {new TimedMethod(60, "Lose")};
+				    }
+				}
 			}
-			if (i != enemySlot - 1 && enemies[i] != null && enemies[i].GetHealth() <= 0 && enemies[i].GetAlive()) {
+			if ((i != enemySlot - 1) && (enemies[i] != null) && (enemies[i].GetHealth() <= 0) && enemies[i].GetAlive()) {
 				enemies[i].SetAlive(false);
 				enemyCount--;
 				enemies[i].GetPassive().Deactivate(false);
@@ -235,7 +269,20 @@ public static class Party {
 			playerCount--;
 			dead.GetPassive().Deactivate(true);
 			if (dead.GetChampion()) {
-				return new TimedMethod[] {new TimedMethod(60, "Lose")};
+				if (BagContains(new Defibrilator()) && playerCount > 0) {
+				    for (int i = 0; i < 10; i++) {
+						if (items[i] != null && items[i].GetType().Equals(new Defibrilator().GetType())) {
+				            items[i] = null;
+							break;
+		               	}
+					}
+					dead.SetAlive(true);
+					dead.Heal(1);
+					playerCount++;
+					return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Your teammates used the defibrilator"})};
+				} else {
+    				return new TimedMethod[] {new TimedMethod(60, "Lose")};
+				}
 			} else {
 				//members[playerSlot - 1] = null;
 				//members[playerSlot - 1].SetAlive(false);

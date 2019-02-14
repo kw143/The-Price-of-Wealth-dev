@@ -1,6 +1,6 @@
 public class Donut : Item {
 	
-	public Donut() {name = "Donut"; description = "Restores 15 hp. You lose 1 power and defense"; selects = true; price = 2;}
+	public Donut() {name = "Donut"; description = "Restores 15 hp. You lose 1 power and defense"; selects = true; price = 2; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);

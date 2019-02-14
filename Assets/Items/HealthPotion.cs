@@ -2,7 +2,7 @@ public class HealthPotion : Item {
 	
 	public HealthPotion() {
     	name = "Health Potion"; description = "+3 MaxHP. Wouldn't it be great if Tristan remembered anything from Chem to name this right?";
-	    selects = true; price = 11;
+	    selects = true; price = 11; usableOut = true;
 	}
 	
 	public override TimedMethod[] UseSelected(int i) {

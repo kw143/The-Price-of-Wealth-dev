@@ -26,7 +26,7 @@ public class HistoryMajor : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy());
 		}
-		guard += 2;
+		guard += 1;
 		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4});
 		attackPart.CopyTo(moves, 1);

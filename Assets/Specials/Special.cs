@@ -8,9 +8,9 @@ public class Special {
 	public int modifier;
 	public bool usableOut = false;
 	public bool selects;
+	public bool useDead;
 	
-	public Special() {
-	}
+	public Special() {useDead = false;}
 	
 	public string GetName() {return name;}
 	public void SetModifier(int mod) {modifier = mod;}
@@ -20,4 +20,4 @@ public class Special {
 	public virtual TimedMethod[] UseSupport(int i) {return new TimedMethod[0];}
 	public virtual TimedMethod[] UseSelects(int i) {return new TimedMethod[0];}
 	public virtual void UseOutOfCombat() {}
-	}
+}

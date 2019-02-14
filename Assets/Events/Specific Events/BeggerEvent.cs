@@ -2,7 +2,9 @@ using System.Collections.Generic;
 
 public class BeggerEvent : Event {
 	
-	public BeggerEvent() {
+	public BeggerEvent() {}
+	
+	public override void Enact () {
 		Item[] items = Party.GetItems();
 		List<int> indexes = new List<int>();
 		for (int i = 0; i < 10; i++) {
@@ -29,9 +31,6 @@ public class BeggerEvent : Event {
 		options3 = new LinkedList<TimedMethod>();
 		options3.AddLast(new TimedMethod("Resolve"));
 		optionText3 = "Refuse";
-		
-		
 	}
-	
 	
 }

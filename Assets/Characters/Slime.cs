@@ -40,11 +40,16 @@ public class Slime : Character {
 	
 	public override void Damage (int amount) {
 		health = System.Math.Max(health - amount, 0);
-		Party.GetPlayer().status.gooped = true;
+		Party.GetPlayer().status.Goop();
 		if (health > 0) {
 			Character splitted = new Slime();
 			Party.AddEnemy(splitted);
+			splitted.SetMaxHP(maxHP);
 			splitted.SetHealth(health);
+			splitted.SetPower(power);
+			splitted.SetDefense(defense);
+			splitted.SetGuard(guard);
+			splitted.SetCharge(charge);
 			splitted.SetQuirk(quirk.Clone());
 			Splitter castPassive = (Splitter) passive;
 			castPassive.split = true;

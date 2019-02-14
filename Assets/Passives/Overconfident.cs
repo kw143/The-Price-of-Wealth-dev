@@ -4,7 +4,7 @@ public class Overconfident : Quirk {
 	
 	public Overconfident (Character c) {self = c; name = "Overconfident"; description = "Powered up at max hp";}
 	
-	public override TimedMethod[] CheckLead (bool player) {
+	public override TimedMethod[] Check(bool player) {
 		if (powered && self.GetHealth() < self.GetMaxHP()) {
 			powered = false;
 			self.SetPower(self.GetPower() - 3);
@@ -19,6 +19,10 @@ public class Overconfident : Quirk {
 			return new TimedMethod[0];
 		}
 	}
+	
+	public override TimedMethod[] CheckLead(bool player) {
+		return Check(player);
+	} 
 	
 	public override TimedMethod[] Initialize (bool player) {
 		powered = false;

@@ -1,7 +1,7 @@
 public class Politician : Character {
 	
-    int cycle;
-	bool broken;
+    public int cycle;
+	public bool broken;
 	
 	public Politician() {
 	    health = 60; maxHP = 60; strength = 3; power = 0; charge = 0; defense = 0; guard = 0; 
@@ -14,13 +14,19 @@ public class Politician : Character {
 	
 	public override TimedMethod[] AI () {
 		if (broken) {
-			if (cycle < 2) {
+			if (Party.enemyCount > 1) {
+				return Switch();
+			}
+			if (cycle == 0) {
 				cycle++;
 				return Weak();
-			} else {
-				cycle = 0;
+			} else if (cycle == 1) {
+				cycle ++;
 				return SaveFace();
-		    }
+		    } else {
+				cycle = 0;
+				return Manager();
+			}
 		} else {
 		    if (cycle == 0) {
 		    	cycle++;
@@ -113,6 +119,19 @@ public class Politician : Character {
 	public TimedMethod[] SaveFace() {
 		evasion += 4;
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician tried to save face. Evasion up"})};
+	}
+	
+	public TimedMethod[] Manager() {
+		Party.AddEnemy(new CampaignManager());
+		Switch();
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician called upon the campaign manager"}),
+		    new TimedMethod(0, "EnemySwitch", new object[] {1, 2})};
+	}
+	
+	public TimedMethod[] Switch() {
+		Party.enemySlot = 2;
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician is waiting for the campaign manager"}),
+		    new TimedMethod(0, "EnemySwitch", new object[] {1, 2})};
 	}
 	
 	public override void CreateDrops () {

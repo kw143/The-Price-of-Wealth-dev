@@ -8,7 +8,7 @@ public class Rocket : Special {
 		    stunPart = Party.GetEnemy().status.Stun(2)[0];
 		}
 		return new TimedMethod[] {new TimedMethod(0, "AttackAny", new object[] {
-			Party.members[i], Party.GetEnemy(), 8, 8, Party.members[i].GetAccuracy()/2, true, true, false})};
+			Party.members[i], Party.GetEnemy(), 8, 8, Party.members[i].GetAccuracy()/2, true, true, false}), stunPart};
 	}
 	
 }

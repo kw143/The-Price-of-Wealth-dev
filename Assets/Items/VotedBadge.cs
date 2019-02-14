@@ -3,7 +3,7 @@ public class VotedBadge : Item {
 	public VotedBadge () {
 	    name = "VotedBadge"; 
 		description = "While in inventory, failing a recruit due to chance causes the enemy to spare you rather than keep fighting";
-		price = 2;
+		price = 2; usableOut = true;
     }
 	
 	public override TimedMethod[] Use () {

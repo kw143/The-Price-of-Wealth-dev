@@ -26,7 +26,7 @@ public class DanceMajor : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy());
 		}
-		evasion += 3;
+		GainEvasion(3);
 		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
 		attackPart.CopyTo(moves, 1);

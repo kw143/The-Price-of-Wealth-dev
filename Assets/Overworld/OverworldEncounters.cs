@@ -299,4 +299,12 @@ public class OverworldEncounters : MonoBehaviour {
 			return new Character[] {new Instructor(), new Instructor(), new Instructor(), new Instructor()};
 		}
 	}
+	
+	public void DebugBattle() {
+		Party.AddEnemy(new Villain());
+		Party.area = "Overworld";
+		Time.Increment();
+		SceneManager.LoadScene("Battle");
+		return;
+	}
 }

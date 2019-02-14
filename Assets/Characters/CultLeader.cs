@@ -127,7 +127,7 @@ public class CultLeader : PizzaCultist {
 		    pizzas--;
 			food[pizzas] = new Pizza();
 		}
-		food[food.Length] = new GoldenPizza();
+		food[food.Length - 1] = new GoldenPizza();
 		return food;
 	}
 	

@@ -1,6 +1,6 @@
 public class Pizza : Item {
 	
-	public Pizza() {name = "Pizza"; description = "Restores 10 hp"; selects = true; price = 2;}
+	public Pizza() {name = "Pizza"; description = "Restores 10 hp"; selects = true; price = 2; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(10);

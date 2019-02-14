@@ -14,6 +14,7 @@ public class StatusBarE : MonoBehaviour {
 	string quirk;
 	string statuses;
 	string hp;
+	string recruitableText;
 	string bonusText;
     string defaultText;
 	string specificText;
@@ -36,7 +37,12 @@ public class StatusBarE : MonoBehaviour {
 			accEvade = "Acc: " + enemy.GetAccuracy().ToString() + "    Evade: " + enemy.GetEvasion().ToString();
 		    quirk = "Quirk: " + enemy.GetQuirk().GetName();
 			statuses = enemy.status.BarText();
-			defaultText = offense + "\n" + defense + "\n" + accEvade + "\n" + quirk + "\n" + statuses + "\n";
+			if (enemy.GetRecruitable()) {
+				recruitableText = "recruitable if alone";
+			} else {
+				recruitableText = "unrecruitable";
+			}
+			defaultText = offense + "\n" + defense + "\n" + accEvade + "\n" + quirk + "\n" + statuses + "\n" + recruitableText + "\n";
 			specificText = enemy.SpecificBarText();
 		    if (informed) {
 			    hp = enemy.GetHealth().ToString();

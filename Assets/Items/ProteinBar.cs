@@ -1,6 +1,6 @@
 public class ProteinBar : Item {
 	
-	public ProteinBar() {name = "Protein Bar"; description = "Restores 5 hp. You gain 1 power"; selects = true; price = 2;}
+	public ProteinBar() {name = "Protein Bar"; description = "Restores 5 hp. You gain 1 power"; selects = true; price = 2; usableOut = true;}
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(5);
