@@ -10,7 +10,9 @@ public class Factorial : Special {
     public override TimedMethod[] Use() {
 		if (lastUse == Party.turn - 1) {
 		    answer = answer * factorial;
-		    factorial++;
+			if (factorial < 8) {
+		        factorial++;
+		    }
 		    lastUse++;
 		} else {
 			answer = 1; factorial = 2; lastUse = Party.turn; 
@@ -18,7 +20,9 @@ public class Factorial : Special {
 		if (!Attacks.EvasionCheck(Party.GetEnemy(), Party.GetPlayer().GetAccuracy())) {
 			answer = 1; factorial = 1;
 		}
+		Attacks.SetAudio("Fire Hit", 10);
 		return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}),
+    		new TimedMethod(0, "AudioAfter", new object[] {"Laser Shot", 15}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {true, answer, answer, Party.GetPlayer().GetAccuracy(), true, true, false})};
 	}
 	

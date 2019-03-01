@@ -47,6 +47,8 @@ public class Character {
 	protected bool alive;
 	//Items gotten on victory
 	public Item[] drops;
+	//Attack description
+	public string attackEffect;
 	
 	//This constructor is usually unused
 	public Character(int health, int maxHP, int strength, int accuracy,
@@ -62,7 +64,7 @@ public class Character {
 	//public Character(Quirk quirkR) {}
 	
 	//Initializes a new character. This will be called whenever creating an instance of a subclass as well
-	public Character () {alive = true; status = new Status(this); name = Names.Get();}
+	public Character () {alive = true; status = new Status(this); name = Names.Get(); attackEffect = "";}
 	
 	public void SetHealth (int health) {if (health < this.health) {status.Awake();} this.health = health; if (health <= 0) {alive = false;}}
 	public int GetHealth () {return health;}
@@ -161,7 +163,8 @@ public class Character {
 			+ " Evasion: " + evasion.ToString() + " Dexterity: " + dexterity.ToString() + "\nPrimary Special: " 
 			+ special.GetName() + " - " + special.ToString() + "\nSupport Special: " 
 			+ special2.GetName() + " - " + special2.ToString() + "\nPassive: " + passive.GetName() + " - " 
-			+ passive.GetDescription() + "\nTrait: " + quirk.GetName() + " - " + quirk.GetDescription() + "\n" + status.DescriptorText();
+			+ passive.GetDescription() + "\nTrait: " + quirk.GetName() + " - " + quirk.GetDescription() + "\n" 
+			+ "On basic attack: " + attackEffect + "\n" + status.DescriptorText();
 		} else {
 			return quirk.GetName() + " " + name + ". This character is at 0 hp "; 
 		}

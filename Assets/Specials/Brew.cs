@@ -5,7 +5,8 @@ public class Brew : Special {
 	
 	public override TimedMethod[] Use () {
 		Party.UseSP(GetCost() * -1);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"You don't have time to do this"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"You don't have time to do this"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public override void UseOutOfCombat () {

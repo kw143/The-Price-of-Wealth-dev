@@ -7,6 +7,7 @@ public class Prescribe : Special {
 		int amount = rng.Next(8) + 5;
 		Party.members[i].Heal(amount);
 		Party.members[i].status.poisoned = 0;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " was healed for " + amount.ToString() + " hp"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Heal"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " was healed for " + amount.ToString() + " hp"})};
 	}
 }

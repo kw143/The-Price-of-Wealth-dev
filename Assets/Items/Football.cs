@@ -6,7 +6,8 @@ public class Football : Item {
 		if (Attacks.EvasionCheck(Party.GetEnemy(), Party.GetPlayer().GetAccuracy())) {
 			Party.AddItem(this);
 		}
-		return new TimedMethod[] {new TimedMethod(60, "StagnantAttack", new object[] {
+		Attacks.SetAudio("Blunt Hit", 20);
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Big Swing"}), new TimedMethod(60, "StagnantAttack", new object[] {
 			true, Party.GetPlayer().GetStrength() + 3, Party.GetPlayer().GetStrength() + 3, Party.GetPlayer().GetAccuracy(), true, true, false})};
 	}
 }

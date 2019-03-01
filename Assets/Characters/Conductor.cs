@@ -31,14 +31,18 @@ public class Conductor : Character {
 			}
 		}
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"ConductorCount"}),
+		    new TimedMethod(0, "Audio", new object[] {"Button"}), new TimedMethod(0, "AudioAfter", new object[] {"Button", 15}),
+		    new TimedMethod(0, "AudioAfter", new object[] {"Button", 15}), new TimedMethod(0, "AudioAfter", new object[] {"Button", 15}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " initiated the performance. All charge up"})};
 	}
 	
 	public virtual TimedMethod[] Forte() {
+		Attacks.SetAudio("Blind", 15);
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			Status.NullifyAttack(Party.GetPlayer());
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " caused a forte"}),
+		    new TimedMethod(0, "AudioAfter", new object[] {"Trumpet", 0}),
 		    new TimedMethod(0, "StagnantAttack",new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
@@ -48,10 +52,14 @@ public class Conductor : Character {
 				c.Heal(3);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " caused a piano. Team was healed"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Piano"}), new TimedMethod(0, "AudioAfter", new object[] {"Heal", 60}),
+		new TimedMethod(60, "Log", new object[] {ToString() + " caused a piano. Team was healed"})};
 	}
 	
 	public TimedMethod[] Finale() {
+		if (Party.turn < 8) {
+			return Forte();
+		}
 		int dmg = 5;
 		for (int i = 0; i < 4; i++) {
 			if (i != Party.enemySlot - 1 && Party.enemies[i] != null && Party.enemies[i].GetAlive()) {
@@ -59,11 +67,15 @@ public class Conductor : Character {
 				dmg += 5;
 			}
 		}
-		if (dmg > 0) {
+		if (Party.enemyCount > 1) {
+			Attacks.SetAudio("Blunt Hit", 15);
 			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " did the finale. All team members deleted"}),
+			new TimedMethod(0, "Audio", new object[] {"Finale"}),
 		    new TimedMethod(0, "StagnantAttack",new object[] {false, dmg, dmg, GetAccuracy(), true, true, false})};
 		} else {
+			Attacks.SetAudio("Slap", 10);
 			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " attacked with the baton"}),
+			new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack",new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 		}
 	}

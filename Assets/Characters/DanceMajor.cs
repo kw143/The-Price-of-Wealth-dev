@@ -4,7 +4,7 @@ public class DanceMajor : Character {
 		health = 16; maxHP = 16; strength = 2; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 14; accuracy = 14; dexterity = 5; evasion = 0; type = "Dance Major"; passive = new Footwork(this);
 		quirk = Quirk.GetQuirk(this); special = new Tumble(); special2 = new Lunge();
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "gain 3 evasion";
 	}
 	
 	public override TimedMethod[] AI () {
@@ -27,29 +27,34 @@ public class DanceMajor : Character {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy());
 		}
 		GainEvasion(3);
-		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
+		Attacks.SetAudio("Knife", 10);
+		TimedMethod[] moves = new TimedMethod[attackPart.Length + 2];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
-		attackPart.CopyTo(moves, 1);
+		moves[1] = new TimedMethod(0, "Audio", new object[] {"Small Swing"});
+		attackPart.CopyTo(moves, 2);
 		return moves;
 	}
 	
 	public TimedMethod[] Attack() {
-		evasion += 5;
+		GainEvasion(5);
+		Attacks.SetAudio("Knife", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " made a darting attack"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Dodge() {
-		evasion += 10;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is dodging"})};
+		GainEvasion(10);
+		return new TimedMethod[] {new TimedMethod(0, "AudioAfter", new object[] {"Big Swing", 30}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " is dodging"})};
 	}
 	
 	public TimedMethod[] Finish() {
 		int atk = evasion;
 		evasion = 0;
+		Attacks.SetAudio("Blunt Hit", 30);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used their positioning for a big attack"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "AudioAfter", new object[] {"Big Swing", 20}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, atk, atk, GetAccuracy(), true, true, false})};
 	}
 	

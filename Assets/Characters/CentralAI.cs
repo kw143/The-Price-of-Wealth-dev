@@ -31,20 +31,26 @@ public class CentralAI : SecurityHologram {
 	}
 	
 	public TimedMethod[] Disintegrate () {
+		Attacks.SetAudio("Acid", 20);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " activated the DISINTIGRATION BEAM"}),
+		    new TimedMethod(0, "Audio", new object[] {"Disintegration"}),
 	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 20, 20, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Charge() {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " stored energy"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Recursion"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " stored energy"})};
 	}
 	
 	public TimedMethod[] Disrupt () {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
+			TimedMethod[] stunPart = Party.GetPlayer().status.Stun(3);
 			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " fired a disruptive wave"}),
-    			Party.GetPlayer().status.Stun(3)[0]};
+			    new TimedMethod(0, "Audio", new object[] {"Laser Shot"}), new TimedMethod(0, "Audio", new object[] {"Tazer"}),
+    			stunPart[0], stunPart[1]};
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " missed a disruptive wave"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Laser Shot"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " missed a disruptive wave"})};
 	}
 	
 	public override void CreateDrops() {

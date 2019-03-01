@@ -13,6 +13,7 @@ public class Filibuster : Special {
 				c.status.Sleep();
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " wouldn't stop talking"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Filibuster"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " wouldn't stop talking"})};
 	}
 }

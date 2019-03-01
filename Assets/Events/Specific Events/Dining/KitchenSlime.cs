@@ -9,9 +9,9 @@ public class KitchenSlime : Event {
 		    + "bubbling is heard from the center";
 		options1 = new LinkedList<TimedMethod>();
 		Character[] slime = new Character[] {new Slime()};
-		slime[0].SetMaxHP(100); slime[0].SetHealth(100); slime[0].SetPower(8); slime[0].SetDefense(-8); slime[0].SetQuirk(new Catalyst(slime[0]));
+		slime[0].SetMaxHP(50); slime[0].SetHealth(50); slime[0].SetPower(8); slime[0].SetDefense(-8); slime[0].SetQuirk(new Catalyst(slime[0]));
 		options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new BattleEvent(slime, "As you near the center of the room, a towering"
-		    + "slime looms in front of you. Prepare yourself")}));
+		    + " slime looms in front of you. Prepare yourself")}));
 		optionText1 = "There is no other way forward";
 		options2 = new LinkedList<TimedMethod>();
 		options2.AddLast(new TimedMethod("Escape"));
@@ -20,7 +20,7 @@ public class KitchenSlime : Event {
 			options3 = new LinkedList<TimedMethod>();
 			Character[] slimes = new Character[] {new Slime(), new Slime(), new Slime(), new Slime()};
 			foreach (Character c in slimes) {
-				c.SetMaxHP(25); c.SetHealth(25); c.SetPower(8); c.SetDefense(-8); c.SetQuirk(new Regeneration(c));
+				c.SetMaxHP(15); c.SetHealth(15); c.SetPower(8); c.SetDefense(-8); c.SetQuirk(new Regeneration(c));
 			}
 			options3.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new BattleEvent(slimes, 
 			    "The slime goo shoots towards the center of the room into a much larger slime. "

@@ -25,25 +25,31 @@ public class Expirimentor : Researcher {
 	public TimedMethod[] Trap() {
 		cycle++;
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
-			return new TimedMethod[] {new TimedMethod(60, "Audio", new object[] {"ExpirimentorTrap"}), new TimedMethod(60, "Log", new object[] {
-				ToString() + " used an overly complex mouse trap"}), Party.GetPlayer().status.Goop()[0]};
+			TimedMethod[] goopPart = Party.GetPlayer().status.Goop();
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"ExpirimentorTrap"}),
+    			new TimedMethod(0, "AudioAfter", new object[] {"Powder", 30}), new TimedMethod(60, "Log", new object[] {
+				ToString() + " used an overly complex mouse trap"}), goopPart[0], goopPart[1]};
 		} else {
-			return new TimedMethod[] {new TimedMethod(60, "Audio", new object[] {"ExpirimentorTrap"}), new TimedMethod(60, "Log", new object[] {
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"ExpirimentorTrap"}),
+    			new TimedMethod(0, "Audio", new object[] {"Powder"}), new TimedMethod(60, "Log", new object[] {
 				ToString() + " used such an overly complex mouse trap it was easy to avoid"})};
 		}
 	}
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Fire Hit", 20);
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			Party.GetPlayer().GainCharge(-4);
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung heated metal"}),
+		    new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 6, 6, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Mystery() {
 		if (!Attacks.EvasionCycle(this, Party.GetPlayer())) {
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " splashed chemicals...on the floor"})};
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Fumes"}),
+			    new TimedMethod(60, "Log", new object[] {ToString() + " splashed chemicals...on the floor"})};
 		}
 		cycle = 3;
 		System.Random rng = new System.Random();
@@ -59,14 +65,18 @@ public class Expirimentor : Researcher {
 			statusPart = Party.GetPlayer().status.Stun(rng.Next(3) + 2);
 		} else if (num == 4) {
 			Status.NullifyAttack(Party.GetPlayer()); Status.NullifyDefense(Party.GetPlayer());
-			statusPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Attack and defense were reset"})};
+			statusPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {"Attack and defense were reset"}),
+    			new TimedMethod(60, "Audio", new object[] {"Nullify"})};
 		} else {
 			Party.GetPlayer().SetEvasion(Party.GetPlayer().GetEvasion() - Party.GetPlayer().GetDexterity());
 			int dmg = rng.Next(10) + 1;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " splashed chemicals...what did they do?"}),
+			Attacks.SetAudio("Acid", 15);
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Fumes"}),
+			    new TimedMethod(60, "Log", new object[] {ToString() + " splashed chemicals...what did they do?"}),
 			    new TimedMethod(0, "StagnantAttack", new object[] {false, dmg, dmg, GetAccuracy(), true, true, false})};
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " splashed chemicals...what did they do?"}), statusPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Fumes"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " splashed chemicals...what did they do?"}), statusPart[0], statusPart[1]};
 	}
 	
 	public TimedMethod[] Mutate() {
@@ -89,14 +99,16 @@ public class Expirimentor : Researcher {
 				}
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Audio", new object[] {"ExpirimentorObserve"}), 
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"ExpirimentorObserve"}),
+    		new TimedMethod(0, "AudioAfter", new object[] {"Clean", 20}), new TimedMethod(0, "AudioAfter", new object[] {"Acid", 15}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " sprayed a gas around his \"team\""})};
 	}
 	
 	public TimedMethod[] Switch () {
 		if (GetGooped()) {
 			status.gooped = false;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " escaped the goop"})};
+			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " escaped the goop"}),
+			    new TimedMethod(0, "Audio", new object[] {"Clean"})};
 		}
 		if (Party.enemyCount > 1) {
 			int former = Party.enemySlot;

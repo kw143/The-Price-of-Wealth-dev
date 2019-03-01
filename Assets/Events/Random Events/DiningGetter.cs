@@ -39,8 +39,8 @@ public static class DiningGetter {
 		eat.Add(new DiningHardBattle());
 		eat.Add(new ItemEvent(new Item[] {new Pizza(), new Celery(), new Curry(), new ProteinBar()}, "Tons of food is here untouched"));
 		eat.Add(new Event("TA's are guarding some donuts", new LinkedList<TimedMethod>(
-	        new TimedMethod[] {new TimedMethod(0, "Item", new object[] {new Item[] {new Donut(), new Donut(), new Donut()}}),
-			new TimedMethod(0, "Battle", new object[] { new Character[] {new TeachingAssistant(), new TeachingAssistant(),
+	        new TimedMethod[] {new TimedMethod(0, "NextEvent", new object[] {new ItemEvent(new Item[] {new Donut(), new Donut(), new Donut()},
+			"The donuts are yours")}), new TimedMethod(0, "Battle", new object[] {new Character[] {new TeachingAssistant(), new TeachingAssistant(),
 			new TeachingAssistant(), new TeachingAssistant()}})}), new LinkedList<TimedMethod>(new TimedMethod[] {
 			new TimedMethod("Resolve")}), null, null, "It's for the donuts", "Don't bother", null, null));
 		eat.Add(new PoisonCoffee());

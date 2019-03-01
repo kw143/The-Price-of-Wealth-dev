@@ -30,14 +30,16 @@ public class Tenured : Instructor {
 	}
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Slap", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " attacked"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Coffee() {
 		status.Coffee();
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " drank the coffee"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Drink"}), new TimedMethod(0, "AudioAfter", new object[] {"Fire", 15}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " drank the coffee"})};
 	}
 	
 	public TimedMethod[] HighHorse () {
@@ -52,7 +54,7 @@ public class Tenured : Instructor {
 			Party.GetPlayer().GainCharge(-6);
 		}
 		charge += 5;
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill3"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill3"}), new TimedMethod(0, "Audio", new object[] {"Poison"}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " called you a failure, worthless, ect"})};
 	}
 	
@@ -62,11 +64,11 @@ public class Tenured : Instructor {
 		    sleepPart = Party.GetPlayer().status.Sleep();
 			Status.NullifyAttack(Party.GetPlayer()); Status.NullifyDefense(Party.GetPlayer());
 		} else {
-			sleepPart = new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}),
+		    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}), new TimedMethod(0, "Audio", new object[] {"Filibuster"}),
 			    new TimedMethod(60, "Log", new object[] {"It went over your head"})};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " lectured"}), sleepPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}), new TimedMethod(0, "Audio", new object[] {"Filibuster"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " lectured"}), sleepPart[0], sleepPart[1]};
 	}
 	
 	public override void CreateDrops() {

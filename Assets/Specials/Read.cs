@@ -5,6 +5,7 @@ public class Read : Special {
 	public override TimedMethod[] UseSupport (int i) {
 		Party.members[i].status.Regenerate(2);
 		Party.members[i].status.Sleep();
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " is reading"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Heal"}),
+    		new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " is reading"})};
 	}
 }

@@ -5,6 +5,6 @@ public class Trumpet : Special {
     public override TimedMethod[] Use() {
         string message = Party.GetEnemy() + " lost attack";
 		Status.NullifyAttack(Party.GetEnemy());
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Trumpet"}), new TimedMethod(60, "Log", new object[] {message})};
     }
 }

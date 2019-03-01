@@ -24,24 +24,10 @@ public class Quarterback : FootballPlayer {
 		}
 	}
 	
-	public override TimedMethod[] BasicAttack() {
-		Democracy castPassive = (Democracy)passive;
-		castPassive.attacked = true;
-		TimedMethod[] attackPart;
-		if (Party.BagContains(new Metronome())) {
-			attackPart = Attacks.Attack(this, Party.GetEnemy(), strength + 2, strength + 2, GetAccuracy(), true, true, false);
-		} else {
-		    attackPart = Attacks.Attack(this, Party.GetEnemy());
-		}
-		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
-		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4});
-		attackPart.CopyTo(moves, 1);
-		return moves;
-	}
-	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("Blunt Hit", 30);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " tackled "}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Running"}),
 			new TimedMethod(0, "StagnantAttack", new object[] {false, 5, 5, GetAccuracy(), true, true, false})};
 	}
 	
@@ -51,11 +37,12 @@ public class Quarterback : FootballPlayer {
 			Party.GetPlayer().GainDefense(-1);
 			stunPart = Party.GetPlayer().status.Stun(2);
 		} else {
-			stunPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
+			stunPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
+		Attacks.SetAudio("Slap", 20);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " committed a foul "}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
-			new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, GetAccuracy(), true, true, false}), stunPart[0]};
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
+			new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, GetAccuracy(), true, true, false}), stunPart[0], stunPart[1]};
 	}
 	
 	public TimedMethod[] Charge () {

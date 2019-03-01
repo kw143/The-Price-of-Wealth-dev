@@ -6,7 +6,7 @@ public class CSMajor : Character {
         health = 16; maxHP = 16; strength = 2; power = 0; charge = 0; defense = 0; guard = 0; 
 		baseAccuracy = 18; accuracy = 18; dexterity = 4; evasion = 0; type = "CS Major"; passive = new WikiHPedia(this);
 		quirk = Quirk.GetQuirk(this); special = new Recursion(); special2 = new Internet(); player = false; champion = false; recruitable = true;
-		attacks = 0; CreateDrops();
+		attacks = 0; CreateDrops(); attackEffect = "no bonus effect";
 	}
 
 	
@@ -15,22 +15,26 @@ public class CSMajor : Character {
 		int seed = rnd.Next(10);
 		TimedMethod[] moves;
 		if (seed > 9 - attacks) {
-			moves = new TimedMethod[attacks + 2];
+			Attacks.SetAudio("Blunt Hit", 10);
+			moves = new TimedMethod[attacks + 3];
 			moves[0] = new TimedMethod(60, "Log", new object[] {"The " + ToString() + " used recursion"});
 			moves[1] = new TimedMethod(0, "Audio", new object[] {"Skill1"});
+			moves[2] = new TimedMethod(0, "AudioAfter", new object[] {"Recursion", 30});
 			for (int i = 1; i < attacks; i++) {
 				moves[i + 1] = new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 3, GetAccuracy(), true, false, false});
 			}
 			moves[attacks + 1] = new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 3, GetAccuracy(), true, true, false});
 		} else if (seed < 6) {
 			attacks++;
+			Attacks.SetAudio("Metal Hit", 30);
 			moves = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " chucked a monitor "}),
-			    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+			    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 			    new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 6, GetAccuracy(), true, true, false})};
 		} else {
 			evasion += 8;
-			moves = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " googled you"})
-			, new TimedMethod(60, "Log", new object[] {"They now know general information about your major. Also evasion increased"})};
+			moves = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " googled you"}),
+			    new TimedMethod(0, "Audio", new object[] {"Wikipedia"}),
+			    new TimedMethod(60, "Log", new object[] {"They now know general information about your major. Also evasion increased"})};
 		}
 		return moves;
 	}
@@ -43,9 +47,11 @@ public class CSMajor : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy());
 		}
-		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
+		Attacks.SetAudio("Metal Hit", 30);
+		TimedMethod[] moves = new TimedMethod[attackPart.Length + 2];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
-		attackPart.CopyTo(moves, 1);
+		moves[1] = new TimedMethod(0, "Audio", new object[] {"Big Swing"});
+		attackPart.CopyTo(moves, 2);
 		return moves;
 	}
 	

@@ -13,7 +13,7 @@ public class Loudspeaker : Event {
 		enemies[0].status.Coffee(); enemies[1].status.Coffee(); enemies[2].status.Coffee();
 		fight.options1 = new LinkedList<TimedMethod>();
 		fight.options1.AddLast(new TimedMethod(0, "Battle", new object[] {enemies}));
-		fight.options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new ItemEvent(new Item[] {new Coffee(), new Coffee(), new Sword()},
+		fight.options1.AddLast(new TimedMethod(0, "NextEvent", new object[] {new ItemEvent(new Item[] {new Coffee(), new Coffee(), new Sword()},
 	    	"You collect what coffee remains")}));
 		fight.optionText1 = "Fight";
 		options1 = new LinkedList<TimedMethod>();

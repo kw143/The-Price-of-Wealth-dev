@@ -40,7 +40,7 @@ public class MapViewer : MonoBehaviour {
 				GameObject line = Instantiate(edgeLine, edgeSpace);
 				line.transform.position = new Vector3((fromPos.x + toPos.x) / 2, (fromPos.y + toPos.y) / 2, 0);
 				line.transform.localScale = new Vector3(1, (float) System.Math.Sqrt(System.Math.Pow(fromPos.x - toPos.x, 2) 
-				+ System.Math.Pow(fromPos.y - toPos.y, 2) + System.Math.Pow(fromPos.x - toPos.z, 2)) / 1200, 1);
+				+ System.Math.Pow(fromPos.y - toPos.y, 2) + System.Math.Pow(fromPos.z - toPos.z, 2)) / 150, 1);
 			    //Debug.Log(line.transform.localScale.ToString());
 				if (toPos.x - fromPos.x != 0 && toPos.y - fromPos.y != 0) {
                     line.transform.Rotate(new Vector3(0, 0, (float) (-1 * (90 - System.Math.Atan((toPos.y - fromPos.y) / (toPos.x - fromPos.x)) * 180 / 3.14))));
@@ -80,6 +80,7 @@ public class MapViewer : MonoBehaviour {
 		if (current != null) {
 			if (id.Contains("Boss")) {
 				Areas.cleared[location] = true;
+				Time.Increment(5);
 			}
 		    eventCatcher.RunEvent(current);
 		    //Temporary solution
@@ -94,6 +95,7 @@ public class MapViewer : MonoBehaviour {
 		graph.cleared[graph.position] = false;
 		if (graph.position.Contains("Boss")) {
 			Areas.cleared[location] = false;
+			Time.Increment(-5);
 		}
 		graph.position = graph.previousPosition;
 		UpdateMap();

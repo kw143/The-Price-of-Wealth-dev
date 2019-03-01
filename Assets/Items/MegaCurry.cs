@@ -5,7 +5,8 @@ public class MegaCurry : Item {
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);
 		Party.members[i].SetCharge(Party.members[i].GetCharge() + 20);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate the MEGACURRY. You feel on-fire"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "Audio", new object[] {"Fire"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate the MEGACURRY. You feel on-fire"})};
 	}
 
     public override void UseOutOfCombat(int i) {

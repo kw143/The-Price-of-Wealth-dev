@@ -110,7 +110,7 @@ public class PartyMenu : MonoBehaviour {
 			kick.interactable = true;
 		}
 		if (item == null && currentSpecial == null) {
-		    if (i == Party.playerSlot || i >= 5) {
+		    if (i == Party.playerSlot || i >= 5 || Party.GetPlayer().GetGooped()) {
 	    		swap.interactable = false;
     		} else {
 			    if (Party.members[i-1].GetAlive() && Party.members[i - 1].status.possessed == 0 && Party.members[i - 1].status.gooped == false) {	

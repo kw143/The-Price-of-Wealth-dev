@@ -4,7 +4,7 @@ public class AerospaceEngineer : Character {
 		health = 14; maxHP = 14; strength = 4; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 16; accuracy = 16; dexterity = 3; evasion = 0; type = "Aerospace Engineering Major"; passive = new Airstrike(this);
 		quirk = Quirk.GetQuirk(this); special = new Drone(); special2 = new Rocket();
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "gain 1 charge";
 	}
 	
 	public override TimedMethod[] AI () {
@@ -26,15 +26,20 @@ public class AerospaceEngineer : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy());
 		}
+		TimedMethod ifHit = new TimedMethod("Null");
+		Attacks.SetAudio("Metal Hit", 10);
 		charge += 1;
-		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
+		TimedMethod[] moves = new TimedMethod[attackPart.Length + 2];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
-		attackPart.CopyTo(moves, 1);
+		moves[1] = new TimedMethod(0, "AudioAfter", new object[] {"Small Swing", 5});
+		attackPart.CopyTo(moves, 2);
 		return moves;
 	}
 	
 	public TimedMethod[] Drone () {
+		Attacks.SetAudio("Blunt Hit",  3);
 	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " fired the drone"}),
+		    new TimedMethod(0, "Audio", new object[] {"Automatic"}),
 	        new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, false, false}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
@@ -46,7 +51,9 @@ public class AerospaceEngineer : Character {
 		} else {
 			stunPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {""})};
 		}
+		Attacks.SetAudio("Metal Hit", 30);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " launched an erratic rocket"}),
+		    new TimedMethod(0, "Audio", new object[] {"Missile"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 8, 8, GetAccuracy() / 2, true, true, false}), stunPart[0]};
 	}
 	
@@ -54,10 +61,12 @@ public class AerospaceEngineer : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    Party.GetPlayer().GainGuard(-5);
 		    Party.GetPlayer().GainEvasion(-5);
-		    return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2})
-			    ,new TimedMethod(60, "Log", new object[] {ToString() + " Sprayed exhaust fumes. Evasion and guard decreased"})};
+		    return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+			    new TimedMethod(0, "Audio", new object[] {"Fumes"}),
+			    new TimedMethod(60, "Log", new object[] {ToString() + " Sprayed exhaust fumes. Evasion and guard decreased"})};
 		} else {
 			return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+			    new TimedMethod(0, "Audio", new object[] {"Fumes"}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " Sprayed exhaust fumes. It missed"})};
 		}
 	}

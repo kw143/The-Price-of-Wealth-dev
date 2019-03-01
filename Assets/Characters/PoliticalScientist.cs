@@ -4,7 +4,7 @@ public class PoliticalScientist : Character {
 		health = 21; maxHP = 21; strength = 3; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 13; accuracy = 13; dexterity = 4; evasion = 0; type = "Political Science Major"; passive = new Democracy(this);
 		quirk = Quirk.GetQuirk(this); special = new Campaign(); special2 = new Filibuster();
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "chance to stun";
 	}
 	
 	public override TimedMethod[] AI () {
@@ -24,11 +24,11 @@ public class PoliticalScientist : Character {
 	
 	public override TimedMethod[] BasicAttack() {
 		System.Random rng = new System.Random();
-		TimedMethod stunPart;
+		TimedMethod[] stunPart;
 		if (rng.Next(10) < 5 && Attacks.EvasionCheck(Party.GetEnemy(), GetAccuracy())) {
-			stunPart = Party.GetEnemy().status.Stun(2)[0];
+			stunPart = Party.GetEnemy().status.Stun(2);
 		} else {
-			stunPart = new TimedMethod(0, "Log", new object[] {""});
+			stunPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
 		Democracy castPassive = (Democracy)passive;
 		castPassive.attacked = true;
@@ -38,28 +38,32 @@ public class PoliticalScientist : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy());
 		}
-		TimedMethod[] moves = new TimedMethod[attackPart.Length + 2];
+		Attacks.SetAudio("Blunt Hit", 15);
+		TimedMethod[] moves = new TimedMethod[attackPart.Length + 4];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
-		attackPart.CopyTo(moves, 1);
-		moves[moves.Length - 1] = stunPart;
+		moves[1] = new TimedMethod(0, "Audio", new object[] {"Big Swing"});
+		attackPart.CopyTo(moves, 2);
+		moves[moves.Length - 2] = stunPart[0];
+		moves[moves.Length - 1] = stunPart[1];
 		return moves;
 	}
 	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("Blunt Hit", 15);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung the campaign sign"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 4, 4, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Campaign () {
 		power += 1; defense += 1; charge += 2; guard += 2;
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}), new TimedMethod(0, "AudioAfter", new object[] {"Recruit", 45}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " campaigned with the promise of action"})};
 	}
 	
 	public TimedMethod[] Debate () {
 	    charge += 4; Party.GetPlayer().GainCharge(4);
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "AudioAfter", new object[] {"Nullify", 15}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " began debating. All charge up"})};
 	}
 	

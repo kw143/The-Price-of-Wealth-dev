@@ -19,6 +19,7 @@ public class HelpMenu : MonoBehaviour {
 		"As a broke college student, you were unaffected by the curse\n" +
 		"You must assemble a team and collect gear to defeat the villain and his 3 subordinates to destroy the source of the possession\n" +
 		"First you will want to build your team and gather supplies in your starting location\n" +
+		"If your player character reaches 0 hp, it's game over, but you can continue if party members fall\n" +
 		"That's it! (if this is your first time, you should read the rest of this menu)",
 		
 		"Stats\n\nStrength: Permanent attack power\nPower: Attack power that lasts for the battle\nCharge: Attack power that lasts for 1 attack\n" +

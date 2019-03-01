@@ -15,8 +15,10 @@ public class Airstrike : Passive {
 			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {(counter + 1).ToString() + " turns until the air-strike"})};
 		} else if (counter == 0) {
 			counter = -1;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The missile has landed!"}),
-			    new TimedMethod(60, "StagnantAttack", new object[] {player, 15, 15, 30, false, true, false})};
+			Attacks.SetAudio("L Explosion", 0);
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Missile"}),
+			    new TimedMethod(60, "Log", new object[] {"The missile has landed!"}),
+			    new TimedMethod(60, "StagnantAttack", new object[] {player, 15, 15, 30, false, false, false})};
 		} else {
 			return new TimedMethod[0];
 		}

@@ -29,12 +29,14 @@ public class ShuttleDriver : Character {
 	
 	public TimedMethod[] Prepare() {
 		fleeing = 1; evasion += 5;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " retreated inside the shuttle"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " retreated inside the shuttle"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public TimedMethod[] Rev() {
 		fleeing = 2;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " revved the engines"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " revved the engines"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public TimedMethod[] Complain() {
@@ -46,24 +48,25 @@ public class ShuttleDriver : Character {
 		}
 		power += num;
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), 
-		new TimedMethod(60, "Log", new object[] {ToString() 
-		+ " complained about money, people, and politics. Power + " + num.ToString()}), new TimedMethod("GetEnemy")};
+	    	new TimedMethod(60, "Log", new object[] {ToString() + " complained about money, people, and politics. Power + " + num.ToString()})};
 	}
 	
 	public TimedMethod[] Beer() {
 		health = System.Math.Min(health + 7, maxHP);
 		accuracy -= 2; defense -= 1;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() 
-		+ " drank a beer. +7hp, defense and accuracy down"}), new TimedMethod("GetEnemy")};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Drink"}), new TimedMethod(60, "Log", new object[] {ToString() 
+		    + " drank a beer. +7hp, defense and accuracy down"}), new TimedMethod("GetEnemy")};
 	}
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Blunt Hit", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " Attacked"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] RunOver() {
+		Attacks.SetAudio("Metal Hit", 15);
 		TimedMethod move;
 		string message;
 		if (GetAccuracy() > Party.GetPlayer().GetEvasion()) {
@@ -74,7 +77,7 @@ public class ShuttleDriver : Character {
 			message = ToString() + " Ran everyone over...but just missed";
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message}), move
-		    , new TimedMethod("WinDelay")};
+		    , new TimedMethod(0, "Audio", new object[] {"Whistle"}), new TimedMethod("WinDelay")};
 	}
 	
 	public override void CreateDrops() {

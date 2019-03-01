@@ -18,7 +18,7 @@ public class Quote : Special {
 				c.status.poisoned = 0; c.status.asleep = 0; c.status.stunned = 0;
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), 
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "AudioAfter", new object[] {"Nullify", 15}),
 		    new TimedMethod(60, "Log", new object[] {Party.GetPlayer().ToString() + " read an inspiring quote"})};
 	}
 }

@@ -5,9 +5,11 @@ public class ToxicSolution : Item {
     public override TimedMethod[] Use () {
 	    Party.AddItem(new Flask());
 		if (Attacks.EvasionCycle(Party.GetPlayer(), Party.GetEnemy())) {
-			return Party.GetEnemy().status.Poison(2);
+			TimedMethod[] poisonPart = Party.GetEnemy().status.Poison(2);
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Clean"}), new TimedMethod(0, "AudioAfter", new object[] {"Acid", 10}),
+			    poisonPart[0], poisonPart[1]};
 		} else {
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"miss"})};
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Clean"}), new TimedMethod(60, "Log", new object[] {"miss"})};
 		}
 	}	
 }

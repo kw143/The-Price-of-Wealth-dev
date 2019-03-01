@@ -41,34 +41,43 @@ public class CultLeader : PizzaCultist {
 	}
 	
 	public override TimedMethod[] CheeseSpell () {
+		TimedMethod audioPart = new TimedMethod(0, "AudioAfter", new object[] {"Goop", 40});
 		TimedMethod[] blindPart;
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    blindPart = Party.GetPlayer().status.Blind(10);
 		} else {
-			blindPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"})};
+			blindPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"}), new TimedMethod("Null")};
+			audioPart = new TimedMethod("Null");
 		}
 		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultLeaderSpell", 2}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " cast CHEESE SPELL!"}), blindPart[0]};
+		    new TimedMethod(60, "Log", new object[] {ToString() + " cast CHEESE SPELL!"}), new TimedMethod(0, "Audio", new object[] {"Cheese"}),
+    			audioPart, blindPart[0], blindPart[1]};
 	}
 	
 	public TimedMethod[] ConsumeSpell () {
 		Heal(20); status.poisoned = 0;
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CultLeaderFeed"}), 
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CultLeaderFeed"}), new TimedMethod(0, "Audio", new object[] {"Eat"}),
+		    new TimedMethod(0, "AudioAfter", new object[] {"Clean", 30}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " cast CONSUME SPELL! Health was restored and poison removed"})};
 	}
 	
 	public override TimedMethod[] TomatoSpell () {
+		TimedMethod audioPart;
 		TimedMethod[] goopPart;
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    goopPart = Party.GetPlayer().status.Goop();
+			audioPart = new TimedMethod(0, "AudioAfter", new object[] {"Oil", 30});
 		} else {
-			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"})};
+			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"}), new TimedMethod("Null")};
+			audioPart = new TimedMethod("Null");
 		}
 		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultLeaderSpell", 2}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " cast TOMATO SPELL!"}), goopPart[0]};
+		    new TimedMethod(60, "Log", new object[] {ToString() + " cast TOMATO SPELL!"}), new TimedMethod(0, "Audio", new object[] {"Cheese"}),
+			    audioPart, goopPart[0], goopPart[1]};
 	}
 	
 	public override TimedMethod[] PepperoniSpell () {
+		Attacks.SetAudio("Slap", 10);
 		TimedMethod move;
 		if (GetAccuracy() > Party.GetPlayer().GetEvasion()) {
 		    move = new TimedMethod(0, "AttackAll", new object[] {false, 2, 2, accuracy, true});
@@ -76,21 +85,25 @@ public class CultLeader : PizzaCultist {
 			move = new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, accuracy, true, true, false});
 		}
 		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultLeaderSpell", 2}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " cast PEPPERONI SPELL!"}), move};
+		    new TimedMethod(60, "Log", new object[] {ToString() + " cast PEPPERONI SPELL!"}),
+			new TimedMethod(0, "Audio", new object[] {"Pepperoni Spell"}), move};
 	}
 	
 	public override TimedMethod[] Slicer () {
+		Attacks.SetAudio("Knife", 35);
 	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " chucked the pizza slicer"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Knife Throw"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 10, 10, GetAccuracy(), true, true, false})};	
 	}
 	
 	public override TimedMethod[] Attack () {
+		Attacks.SetAudio("Knife", 0);
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			power += 3; Heal(10); 
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " tried to sacrifice you"}),
-		    new TimedMethod(0, "Audio", new object[] {"CultLeaderFeed"}),
+		    new TimedMethod(0, "Audio", new object[] {"CultLeaderFeed"}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
+			new TimedMethod(0, "AudioAfter", new object[] {"Poison", 20}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
@@ -98,7 +111,8 @@ public class CultLeader : PizzaCultist {
 		for (int i = 0; i < 4; i++) {
             if (i != Party.enemySlot - 1 && Party.enemies[i] != null && Party.enemies[i].GetAlive()) {
 			    Party.enemies[i].SetAlive(false); Party.enemies[i].SetHealth(0); power += 3; Heal(10);
-			    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CultLeaderFeed"}),
+			    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CultLeaderFeed"}), 
+				    new TimedMethod(0, "AudioAfter", new object[] {"Poison", 20}),
 				    new TimedMethod(60, "Log", new object[] {ToString() + " sacrificed " + Party.enemies[i].ToString()})};
 			}			
 		}
@@ -106,7 +120,8 @@ public class CultLeader : PizzaCultist {
 	}
 	
 	public TimedMethod[] Prepare () {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is running. You have the last move"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is running. You have the last move"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public TimedMethod[] Run () {
@@ -114,7 +129,7 @@ public class CultLeader : PizzaCultist {
 			status.gooped = false;
 			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " escaped the goop"})};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Flee1"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Flee1"}), new TimedMethod(0, "Audio", new object[] {"Running"}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " escaped"}), new TimedMethod("Win")};
 	}
 	

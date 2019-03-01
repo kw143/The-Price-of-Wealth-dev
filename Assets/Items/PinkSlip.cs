@@ -1,6 +1,6 @@
 public class PinkSlip : Item {
 	
-	public PinkSlip() {name = "Pink Slip"; description = "If the enemy is a non-boss, they will flee"; price = 2;}
+	public PinkSlip() {name = "Pink Slip"; description = "If the enemy is a non-boss, they will flee"; price = 3;}
 	
 	public override TimedMethod[] Use () {
 		if (Party.GetEnemy().GetChampion()) {
@@ -21,7 +21,7 @@ public class PinkSlip : Item {
 			}
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {fled.ToString() + " has fled"}),
-			 new TimedMethod(0, "EnemySwitch", new object[] {Party.enemySlot, former})};
+			new TimedMethod(0, "EnemySwitch", new object[] {Party.enemySlot, former})};
 	}
 	
 }

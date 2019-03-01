@@ -4,7 +4,7 @@ public class Metronome : Item {
 	
 	public override TimedMethod[] Use () {
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
-			Party.GetPlayer().ToString() + " likes variance. The metronome was discarded"})};
+			Party.GetPlayer().ToString() + " likes variance. The metronome was discarded"}), new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public override void UseOutOfCombat (int i) {}

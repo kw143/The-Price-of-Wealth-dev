@@ -90,20 +90,23 @@ public class Politician : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 	        sleepPart = Party.GetPlayer().status.Sleep();
 		} else {
-			sleepPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Ineffective"})};
+			sleepPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Ineffective"}), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician filibustered"}), sleepPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Filibuster"}),
+		    new TimedMethod(60, "Log", new object[] {"The Politician filibustered"}), sleepPart[0], sleepPart[1]};
 	}
 	
 	public TimedMethod[] Veto() {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    Status.NullifyAttack(Party.GetPlayer()); Status.NullifyDefense(Party.GetPlayer());
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Nullify"}),
+		        new TimedMethod(60, "Log", new object[] {"The Politician used the veto. Stats were countered"}), new TimedMethod("GetPlayer")};
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician used the veto. Stats were countered"}),
-		new TimedMethod("GetPlayer")};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician used the veto. It failed"}), new TimedMethod("GetPlayer")};
     }
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Gunfire", 30);
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"PoliticianAttack"}), 
 		    new TimedMethod(60, "Log", new object[] {"The Politician delivered the promised destruction"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, false, false}),
@@ -112,13 +115,16 @@ public class Politician : Character {
 	}
 	
 	public TimedMethod[] Weak() {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician attacked"}),
+		Attacks.SetAudio("Blunt Hit", 10);
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician attacked"}), 
+		    new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] SaveFace() {
 		evasion += 4;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician tried to save face. Evasion up"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The Politician tried to save face. Evasion up"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public TimedMethod[] Manager() {

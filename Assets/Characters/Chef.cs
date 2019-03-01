@@ -36,45 +36,55 @@ public class Chef : Character {
 	}
 	
 	public TimedMethod[] Prepare() {
-	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
+	    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Nullify"}), new TimedMethod(60, "Log", new object[] {
 			ToString() + " took out a selection of ingredients, tools, and a portable stove"})};
     }
 	
 	public TimedMethod[] Cook() {
 		guard += 5;
-	    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(60, "Log", new object[] {
+	    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "Audio", new object[] {"Firewall"}),
+		    new TimedMethod(60, "Log", new object[] {
 			ToString() + " cooked all the food behind the stove. Guard + 5"})};
     }
 	
 	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("Metal Hit", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung a frying pan"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Attack", new object[] {false})};
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
+			new TimedMethod(0, "Attack", new object[] {false})};
 	}
 	
 	public TimedMethod[] Meal (string food) {
 		string message = "";
-		TimedMethod[] statusPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Miss"})};
+		TimedMethod[] statusPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Miss"}), new TimedMethod("Null")};
+		TimedMethod audioPart = new TimedMethod("Null");
 		switch (food) {
-			case "eat": message = ToString() + " ate some food. +8 hp"; Heal(8); statusPart[0] = new TimedMethod(0, "Log", new object[] {""});
+		    case "eat": message = ToString() + " ate some food. +8 hp";
+    			Heal(8); statusPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
+				audioPart = new TimedMethod(0, "Audio", new object[] {"Eat"});
 			    break;
 			case "poison": message = ToString() + " chucked raw chicken"; 
 			     if (Attacks.EvasionCycle(this, Party.GetPlayer())) {statusPart = Party.GetPlayer().status.Poison(1);}
+				 audioPart = new TimedMethod(0, "Audio", new object[] {"Missile"});
 			    break;
 			case "attack": message = ToString() + " chucked bread";
 			    if (Attacks.EvasionCycle(this, Party.GetPlayer())) {Party.GetPlayer().GainCharge(-6);
-				    statusPart[0].args = new object[] {"Attack has decreased"};}
+				    statusPart[0].args = new object[] {"Attack has decreased"}; statusPart[1] = new TimedMethod(0, "Audio", new object[] {"Nullify"});}
+				audioPart = new TimedMethod(0, "Audio", new object[] {"Missile"});
 			    break;
 			case "defense": message = ToString() + " chucked jello";
 			    if (Attacks.EvasionCycle(this, Party.GetPlayer())) {Party.GetPlayer().GainGuard(-6);
-				    statusPart[0].args = new object[] {"Defense has decreased"};}
+				    statusPart[0].args = new object[] {"Defense has decreased"}; statusPart[1] = new TimedMethod(0, "Audio", new object[] {"Slime"});}
+				audioPart = new TimedMethod(0, "Audio", new object[] {"Missile"});
 				break;
 			case "stun": message = ToString() + " chucked pepper";
 			    if (Attacks.EvasionCycle(this, Party.GetPlayer())) {statusPart = Party.GetPlayer().status.Stun(3);}
+				audioPart = new TimedMethod(0, "Audio", new object[] {"Powder"});
 				break;
 		}
-		return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), 
-		    new TimedMethod(60, "Log", new object[] {message}), statusPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), audioPart,
+		    new TimedMethod(60, "Log", new object[] {message}), statusPart[0], statusPart[1]};
 	}
 	
 	public override void CreateDrops() {

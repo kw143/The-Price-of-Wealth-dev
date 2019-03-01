@@ -7,8 +7,9 @@ public class Handcuffs : Special {
 		if (Attacks.EvasionCycle(Party.members[i], Party.GetEnemy())) {
 		    goopPart = Party.GetEnemy().status.Goop();
 		} else {
-			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Miss"})};
+			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Miss"}), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(30, "SwitchTo", new object[] {i + 1}), goopPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
+    		new TimedMethod(0, "SwitchTo", new object[] {i + 1}), goopPart[0], goopPart[1]};
 	}
 }

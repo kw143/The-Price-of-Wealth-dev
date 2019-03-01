@@ -36,5 +36,6 @@ public class Passive {
 	public string GetName() {return name;}
 	public string GetDescription() {return description;}
 	public Passive Clone () {return (Passive)this.MemberwiseClone();}
+	public void SetSelf(Character c) {self = c;}
 	
 }

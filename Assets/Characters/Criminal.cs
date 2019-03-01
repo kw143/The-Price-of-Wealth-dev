@@ -24,6 +24,7 @@ public class Criminal : Character {
 	}
 	
 	public TimedMethod[] Steal() {
+		Attacks.SetAudio("Steal", 10);
 		TimedMethod[] stealPart;
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			stealPart = Party.StealItem();
@@ -31,26 +32,28 @@ public class Criminal : Character {
 			stealPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " tried to mug you"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 4, 4, GetAccuracy(), true, true, false}), stealPart[0]};
 	}
 	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("knife", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used a knife"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 8, 8, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Bluff () {
 	    if (Party.enemyCount == 1 && health < maxHP / 2 || drops.Length >= 4) {
 			running = true;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is running. You get the last move"})};
+			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is running. You get the last move"}),
+			    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 		}
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 			Party.GetPlayer().GainCharge(-5);
 		}			
 		guard += 5;
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(0, "AudioAfter", new object[] {"Nullify", 15}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " bluffed. Guard up and opposing charge down"})};
 	}
 	
@@ -58,9 +61,10 @@ public class Criminal : Character {
 		if (GetGooped()) {
 			running = false;
 			status.gooped = false;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is stuck! the escape plan failed, but goop removed"})};
+			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is stuck! the escape plan failed, but goop removed"}),
+			    new TimedMethod(0, "Audio", new object[] {"Clean"})};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Flee1"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Flee1"}), new TimedMethod(0, "Audio", new object[] {"Running"}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " escaped..."}), new TimedMethod("Win")};
 	}
 	

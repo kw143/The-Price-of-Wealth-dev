@@ -5,7 +5,8 @@ public class Meatloaf : Item {
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);
 		Party.members[i].SetPower(Party.members[i].GetPower() + 5);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate a meatloaf. You feel fulfilled"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "Audio", new object[] {"Fire"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate a meatloaf. You feel fulfilled"})};
 	}
 
     public override void UseOutOfCombat(int i) {

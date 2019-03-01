@@ -40,13 +40,16 @@ public class General : Character {
 	}
 	
 	public TimedMethod[] Melee() {
+		Attacks.SetAudio("Blunt Hit", 20);
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"GeneralAttack"}),
 		    new TimedMethod(60, "Log", new object[] {"The General used the gun as a melee weapon"}),
-		    new TimedMethod(0, "Attack", new object[] {false})};
+		     new TimedMethod(0, "Audio", new object[] {"Blunt Hit"}), new TimedMethod(0, "Attack", new object[] {false})};
 	}
 	
 	public TimedMethod[] Automatic() {
+		Attacks.SetAudio("Blunt Hit", 6);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The General fired the automatic"}),
+		    new TimedMethod(0, "Audio", new object[] {"Automatic"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 1, 1, GetAccuracy(), true, false, false}),
 			new TimedMethod(0, "StagnantAttack", new object[] {false, 1, 1, GetAccuracy(), true, false, false}),
 			new TimedMethod(0, "StagnantAttack", new object[] {false, 1, 1, GetAccuracy(), true, false, false}),
@@ -55,12 +58,14 @@ public class General : Character {
 	
 	public TimedMethod[] GrenadeThrow() {
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"GeneralGrenade"}),
+    		new TimedMethod(0, "AudioAfter", new object[] {"Missile", 45}),
 		    new TimedMethod(60, "Log", new object[] {"The General threw a grenade to your team"})};
 	}
 	
 	public TimedMethod[] GrenadeExplosion () {
 		string message;
 		TimedMethod move;
+		Attacks.SetAudio("Blunt Hit", 20);
 		if (GetAccuracy() > Party.GetPlayer().GetEvasion()) {
 		    move = new TimedMethod(0, "AttackAll", new object[] {false, 12, 12, GetAccuracy(), true});
 			message = "The grenade exploded!";
@@ -68,7 +73,7 @@ public class General : Character {
 			move = new TimedMethod(0, "StagnantAttack", new object[] {false, 12, 12, GetAccuracy(), true, true, false});
 			message = "The grenade exploded! but missed";
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message}), move};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message}),  new TimedMethod(0, "Audio", new object[] {"L Explosion"}), move};
 	}
 	
 	public override void CreateDrops() {

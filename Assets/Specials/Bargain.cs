@@ -12,7 +12,7 @@ public class Bargain : Special {
 			}
 		}
 		if (!space) {
-			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Steal1"}), 
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Steal1"}), new TimedMethod(0, "Audio", new object[] {"Steal"}),
 			    new TimedMethod(60, "Log", new object[] {"Your bag is full!"})};
 		}
 		Item[] stealable = Party.GetEnemy().drops;
@@ -30,10 +30,10 @@ public class Bargain : Special {
 	    	}
     		Party.GetEnemy().drops = newDrops;
 		    Party.AddItem(stolen);
-		    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Steal1"}), 
+		    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Steal1"}), new TimedMethod(0, "Audio", new object[] {"Steal"}),
 		        new TimedMethod(60, "Log", new object[] {stolen.GetName() + " was stolen"})};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Steal1"}), 
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Steal1"}), new TimedMethod(0, "Audio", new object[] {"Steal"}),
 		        new TimedMethod(60, "Log", new object[] {"Nothing to steal"})};
 	}
 }

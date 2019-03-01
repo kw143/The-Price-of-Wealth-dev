@@ -8,7 +8,8 @@ public class Warsong : Special {
 				c.GainCharge(3); c.GainGuard(3);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " gave an inspiring song"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Allegro"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " gave an inspiring song"})};
 	}
 
 }

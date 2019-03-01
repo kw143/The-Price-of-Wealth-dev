@@ -25,6 +25,8 @@ public class Dungeon : MonoBehaviour {
 	public int partyIndex;
 	public static bool fled;
 	public static Character[] leftEnemies;
+	public static Event investigated;
+	public static bool toOverworld;
 	Type t;
 	MethodInfo method;
 	public Queue<TimedMethod> effects1;
@@ -55,6 +57,15 @@ public class Dungeon : MonoBehaviour {
 			} else {
 				current.gameObject.SetActive(false);
 			}
+		}
+		if (toOverworld) {
+			toOverworld = false;
+			SceneManager.LoadScene("Overworld");
+		}
+		if (investigated != null) {
+			RunEvent(investigated);
+			investigated = null;
+			toOverworld = true;
 		}
 	}
 	
@@ -127,8 +138,10 @@ public class Dungeon : MonoBehaviour {
 		}
 		
 		//nextMenu.SetActive(false);
+		try {
 		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = false;
 		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = false;
+		} catch {};
 		dungeonMaps.SetActive(false);
 		isEvent = true;
 		eventSpace.SetActive(true);
@@ -141,6 +154,10 @@ public class Dungeon : MonoBehaviour {
 		dungeonMaps.SetActive(true);
 		isEvent = false;
 		eventSpace.SetActive(false);
+		if (toOverworld) {
+			toOverworld = false;
+			SceneManager.LoadScene("Overworld");
+		}
 	}
 	
 	public void Escape () {
@@ -149,6 +166,11 @@ public class Dungeon : MonoBehaviour {
 		dungeonMaps.SetActive(true);
 		isEvent = false;
 		eventSpace.SetActive(false);
+		if (toOverworld) {
+			toOverworld = false;
+			SceneManager.LoadScene("Overworld");
+			return;
+		}
 		dungeonMaps.transform.Find(Areas.location).GetComponent<MapViewer>().Escape();
 	}
 	
@@ -158,6 +180,11 @@ public class Dungeon : MonoBehaviour {
 		dungeonMaps.SetActive(true);
 		isEvent = false;
 		eventSpace.SetActive(false);
+		if (toOverworld) {
+			toOverworld = false;
+			SceneManager.LoadScene("Overworld");
+			return;
+		}
 		dungeonMaps.transform.Find(Areas.location).GetComponent<MapViewer>().EscapeEnemies(leftEnemies);
 		//leftEnemies = null;
 	}
@@ -230,13 +257,15 @@ public class Dungeon : MonoBehaviour {
 	
 	public void NextEvent (Event e) {
 		Areas.followUp = e;
-		Resolve();
+		//Resolve();
 	}
 	
 	
 	public void Battle (Character [] enemies) {
 		foreach (Character c in enemies) {
-			Party.AddEnemy(c);
+			if (c != null) {
+			    Party.AddEnemy(c);
+			}
 	    }
 		Party.area = "Dungeon";
 		isEvent = false;
@@ -263,10 +292,7 @@ public class Dungeon : MonoBehaviour {
 	public void CloseItem () {
 		itemMenu.SetActive(false);
 		nextMenu.SetActive(true);
-		nextMenu.transform.Find("Next").gameObject.GetComponent<Button>().interactable = true;
-		nextMenu.transform.Find("Exit").gameObject.GetComponent<Button>().interactable = true;
-		dungeonMaps.SetActive(true);
-		isEvent = false;
+		Resolve();
 	}
 	
 	public void OpenBag () {
@@ -338,6 +364,15 @@ public class Dungeon : MonoBehaviour {
 		}
 	}
 	
+	public void Apathize (int amount) {
+		for (int i = 0; i < 4; i++) {
+			Character current = Party.GetCharacter(i);
+			if (current != null) {
+				current.status.CauseApathy(amount);
+			}
+		}
+	}
+	
 	public void DamageAll (int amount) {
 		for (int i = 0; i < 4; i++) {
 			Character current = Party.GetCharacter(i);
@@ -389,13 +424,40 @@ public class Dungeon : MonoBehaviour {
 		m.Invoke(Party.members[partyIndex], new object[] {amount});
 	}
 	
-	public void StatusChange (string method, int degree) {
+	public void AllStatChange(string stat, int amount) {
+		foreach (Character c in Party.members) {
+			if (c != null && c.GetAlive()) {
+        		MethodInfo m = c.GetType().GetMethod(stat);
+		        m.Invoke(c, new object[] {amount});
+			}
+		}
+	}
+	
+	public void StatusChange (string method, int? degree) {
 		MethodInfo m = Party.members[partyIndex].status.GetType().GetMethod(method);
 		if (degree == null) {
 			m.Invoke(Party.members[partyIndex].status, new object[] {null});
 		} else {
 		    m.Invoke(Party.members[partyIndex].status, new object[] {degree});
 		}
+	}
+	
+	public void AllStatusChange (string method, int degree) {
+		foreach (Character c in Party.members) {
+			if (c != null && c.GetAlive()) {
+        		MethodInfo m = c.status.GetType().GetMethod(method);
+		        if (degree == null) {
+		        	m.Invoke(c.status, new object[] {null});
+        		} else {
+		            m.Invoke(c.status, new object[] {degree});
+        		}
+			}
+		}
+	}
+	
+	public void ChangeQuirk (Passive quirk) {
+		Party.members[partyIndex].SetQuirk(quirk);
+		quirk.SetSelf(Party.members[partyIndex]);
 	}
 	
 	public void Ally (Character[] recruits) {

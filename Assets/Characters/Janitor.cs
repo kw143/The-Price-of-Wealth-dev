@@ -25,12 +25,14 @@ public class Janitor : Character {
 		status.gooped = false;
 		status.blinded = 0;
 		status.poisoned = 0;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " cleaned negative effects"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Clean"}),
+	    	new TimedMethod(60, "Log", new object[] {ToString() + " cleaned negative effects"})};
 	}
 	
 	public TimedMethod[] Broom() {
+		Attacks.SetAudio("Blunt Hit", 20);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung a broom"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 		    new TimedMethod(0, "Attack", new object[] {false})};
 	}
 	
@@ -41,10 +43,10 @@ public class Janitor : Character {
 			Party.GetPlayer().GainPower(-1);
 			Party.GetPlayer().GainDefense(-1);
 		} else {
-			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"They missed"})};
+			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"They missed"}), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), 
-		    new TimedMethod(60, "Log", new object[] {ToString() + " sprayed toxic, weakening chemicals"}), poisonPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(0, "Audio", new object[] {"Acid"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " sprayed toxic, weakening chemicals"}), poisonPart[0], poisonPart[1]};
 	}
 	
 	public TimedMethod[] Exhaust() {
@@ -54,11 +56,11 @@ public class Janitor : Character {
 			poisonPart = Party.GetPlayer().status.StackPoison(1);
 			blindPart = Party.GetPlayer().status.Blind(5);
 		} else {
-			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"They missed"})};
-			blindPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
+			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"They missed"}), new TimedMethod("Null")};
+			blindPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " released exhaust fumes"}), poisonPart[0], blindPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(0, "Audio", new object[] {"Fumes"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " released exhaust fumes"}), poisonPart[0], poisonPart[1], blindPart[0], blindPart[1]};
 	}
 	
 	public override void CreateDrops() {

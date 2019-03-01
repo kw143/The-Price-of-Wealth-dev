@@ -6,7 +6,8 @@ public class Sanitizer : Item {
 		Party.members[i].status.poisoned = 0;
 		Party.members[i].status.gooped = false;
 		Party.members[i].status.blinded = 0;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Negative effects were removed"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Clean"}),
+    		new TimedMethod(60, "Log", new object[] {"Negative effects were removed"})};
 	}
 	
 	public override void UseOutOfCombat (int i) {

@@ -21,11 +21,12 @@ public static class SportsGetter {
 	    hall.Add(new SportsEasyBattleR());
 		hall.Add(new SportsEasyBattleP());
 		hall.Add(new SportsEasyBattleR());
-		hall.Add(new SportsEasyBattleR());
+		hall.Add(new SportsEasyBattleP());
 		room.Add(new SportsMediumBattle());
 		room.Add(new SportsMediumBattle());
 		room.Add(new SportsMediumBattle());
 		room.Add(new SportsMediumBattle());
+		room.Add(new EvilVisitors());
 		room.Add(new Event("You find the weight room, but it is occupied", new LinkedList<TimedMethod>(new TimedMethod[] {
 			new TimedMethod(0, "NextEvent", new object[] {new SelectMember("Who will lift?", new TimedMethod[] {
 	    	new TimedMethod(0, "StatChange", new object[] {"GainStrength", 1}),
@@ -39,12 +40,17 @@ public static class SportsGetter {
 			new TimedMethod[] {new TimedMethod("Resolve")}), null, null, "Have somebody run. It's very tiring", "Skip", null, null));
 		gate.Add(new SportsMediumBattle());
 	    gate.Add(new SportsMediumBattle());
+		gate.Add(new SportsMediumBattle());
+		gate.Add(new BrokenGate());
 		field.Add(new SportsHardBattle());
 		field.Add(new SportsHardBattle());
+		field.Add(new PossessedGame());
 		stand.Add(new SportsEasyBattleR());
 		stand.Add(new SportsEasyBattleP());
 		stand.Add(new SportsMediumBattle());
 		stand.Add(new SportsHardBattle());
+		stand.Add(new FoodStand());
+		stand.Add(new StandCult());
 		final.Add(new Event("The championship winnings are here. Who will don the title?", new LinkedList<TimedMethod>(
 		    new TimedMethod[] {new TimedMethod(0, "CauseEvent", new object[] {new SelectMember("Choose (+4 strength)", new TimedMethod[] {
 			new TimedMethod(0, "StatChange", new object[] {"GainStrength", 4}),

@@ -6,7 +6,8 @@ public class Donut : Item {
 		Party.members[i].Heal(15);
 		Party.members[i].SetPower(Party.members[i].GetPower() - 1);
 		Party.members[i].SetDefense(Party.members[i].GetDefense() - 1);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate a donut. It was sugary."})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "AudioAfter", new object[] {"Slime", 15}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate a donut. It was sugary."})};
 	}
 
     public override void UseOutOfCombat(int i) {

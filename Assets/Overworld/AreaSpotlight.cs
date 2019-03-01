@@ -38,7 +38,11 @@ public class AreaSpotlight : MonoBehaviour {
 	
 	public void Shop () {}
 	
-	public void Investigate () {}
+	public void Invest () {
+		Event e = Investigate.Get(location);
+		Dungeon.investigated = e;
+		SceneManager.LoadScene("Dungeon");
+	}
 	
 	public void ToMap () {
 		location = null;

@@ -7,7 +7,8 @@ public class VotedBadge : Item {
     }
 	
 	public override TimedMethod[] Use () {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The voted badge was discarded, never to be seen again :("})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The voted badge was discarded, never to be seen again :("}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public override void UseOutOfCombat (int index) {}

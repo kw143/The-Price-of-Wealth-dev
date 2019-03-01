@@ -7,7 +7,8 @@ public class Baton : Item {
 	
 	public override TimedMethod[] Use () {
 		Party.AddItem(this);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"No time for this"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"No time for this"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public override void UseOutOfCombat (int index) {

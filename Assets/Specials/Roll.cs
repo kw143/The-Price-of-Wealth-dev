@@ -4,6 +4,7 @@ public class Roll : Special {
 	
 	public override TimedMethod[] Use() {
 		Party.GetPlayer().GainEvasion(8);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.GetPlayer().ToString() + " gained 8 evasion"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
+		    new TimedMethod(60, "Log", new object[] {Party.GetPlayer().ToString() + " gained 8 evasion"})};
 	}
 }

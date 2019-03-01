@@ -16,6 +16,7 @@ public class MysteryMeat : Event {
 		poison.text = "This was not the best idea";
 		poison.options1 = new LinkedList<TimedMethod>();
 		poison.options1.AddLast(new TimedMethod(0, "StatusChange", new object[] {"Poison", 4}));
+		poison.options1.AddLast(new TimedMethod("Resolve"));
 		poison.optionText1 = "Become poisoned";
 		options1 = new LinkedList<TimedMethod>();
 		optionText1 = "Take it with you";

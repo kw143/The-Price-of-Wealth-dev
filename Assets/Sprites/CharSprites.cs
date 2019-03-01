@@ -13,8 +13,8 @@ public class CharSprites : MonoBehaviour {
 	public GameObject enemy3;
 	public GameObject enemy4;
 	public GameObject[] sprites;
-	public Vector3 leadPositionP = new Vector3(-564, -20, 0);
-	public Vector3 leadPositionE = new Vector3(500, -20, 0);
+	public Vector3 leadPositionP;// = new Vector3(-564, -20, 0);
+	public Vector3 leadPositionE;// = new Vector3(500, -20, 0);
 	
 	// Use this for initialization
 	void Start () {

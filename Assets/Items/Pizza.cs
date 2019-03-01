@@ -4,7 +4,8 @@ public class Pizza : Item {
 	
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(10);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "Audio", new object[] {"Heal"}),
+		    new TimedMethod(60, "Log", new object[] {
 			Party.members[i].GetName() + " ate a pizza. Technically it was free pizza!"})};
 	}
 

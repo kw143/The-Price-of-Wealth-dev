@@ -285,6 +285,7 @@ public class Battle : MonoBehaviour {
 		menu.SetActive(false);
 	    methodQueue.Enqueue(new TimedMethod(30, "EndTurn"));
 		defenseMenu.SetActive(false);
+		Audio("Metal Hit");
 	}
 	
 	public void Dodge () {
@@ -342,6 +343,7 @@ public class Battle : MonoBehaviour {
 	}
 	
 	public void RecruitSuccess () {
+		Audio("Recruit");
 		if (Party.playerCount < 4) {
 		    Party.AddPlayer(enemy);
 		    methodQueue.Clear();
@@ -451,6 +453,7 @@ public class Battle : MonoBehaviour {
 		//menu.transform.Find("Special Button").gameObject.GetComponent<Button>().interactable = true;
 		    menu.transform.Find("Item Button").gameObject.GetComponent<Button>().interactable = true;
 		    menu.transform.Find("Defense Button").gameObject.GetComponent<Button>().interactable = true;
+			Audio("Running");
 		}
 		partyMenu.SetActive(false);
 	}
@@ -458,6 +461,7 @@ public class Battle : MonoBehaviour {
 	public void EnemySwitch(int a, int b) {
 		sprites.GetComponent<CharSprites>().Switch(false, a, b);
 		GetEnemy();
+		Audio("Running");
 	}	
 	
 	
@@ -599,6 +603,7 @@ public class Battle : MonoBehaviour {
 		}
 		menu.SetActive(false);
 		methodQueue.Enqueue(new TimedMethod(0, "EndTurn"));
+		Audio("Skip Turn");
 	}
 	
     public void PreviousMessages() {
@@ -625,6 +630,7 @@ public class Battle : MonoBehaviour {
 	
 	public void Win () {
 		    methodQueue.Clear();
+			Score.victories++;
 			if (Party.fullRecruit != null) {
 				if (Party.playerCount == 4) {
 				    recruitMember.SetActive(true);
@@ -671,6 +677,7 @@ public class Battle : MonoBehaviour {
 	}
 	
 	public void Flee () {
+		Time.Increment(1);
 		if (Party.area != "Overworld") {
 		    Dungeon.fled = true;
 			Dungeon.leftEnemies = new Character[4];
@@ -696,6 +703,10 @@ public class Battle : MonoBehaviour {
 		audio.GetComponent<GameAudio>().Play(name);
 	}
 	
+	public void AudioAfter (string name, int frames) {
+		audio.GetComponent<GameAudio>().PlayAfter(name, frames);
+	}
+	
 	public void AudioRandom (string[] names) {
 		audio.GetComponent<GameAudio>().PlayRandom(names);
 	}
@@ -707,6 +718,8 @@ public class Battle : MonoBehaviour {
 	public void AudioAmount (string name, int amount) {
 		audio.GetComponent<GameAudio>().PlayAmount(name, amount);
 	}
+	
+	public void Null () {}
 	
 	public void ShowMessages (LinkedList<TimedMessage> messages, string finishMethod, object[] finishArgument) {
 		TimedMessage current = messages.First.Value;

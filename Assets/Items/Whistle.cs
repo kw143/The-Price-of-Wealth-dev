@@ -18,7 +18,8 @@ public class Whistle : Item {
 		System.Random rng = new System.Random();
 		int former = Party.enemySlot;
 		Party.enemySlot = pool[rng.Next(Party.enemyCount - 1)] + 1;
-		return new TimedMethod[] {new TimedMethod(0, "EnemySwitch", new object[] {Party.enemySlot, former}), new TimedMethod(
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Whistle"}),
+    		new TimedMethod(0, "EnemySwitch", new object[] {Party.enemySlot, former}), new TimedMethod(
 		    60, "Log", new object[] {Party.GetEnemy().ToString() + " was sent out"})};
 	}
 }

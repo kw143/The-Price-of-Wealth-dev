@@ -58,7 +58,7 @@ public class Shop : MonoBehaviour {
 			yPosition -= 35;
 			current.GetComponent<Product>().SetItem(item);
 		}
-		yPosition = 75;
+		yPosition = 50;
 		foreach (Character hireling in inventory.hirelings) {
 			current = Instantiate(hirelingPrefab, gameObject.transform.Find("StoreUI"));
 			pos = new Vector3(50, yPosition, 0);

@@ -8,7 +8,8 @@ public class Feast : Special {
 				c.Heal(5);
 			}
 		}
-	    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(60, "Log", new object[] {"Party health +5"})};
+	    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "Audio", new object[] {"Heal"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(60, "Log", new object[] {"Party health +5"})};
 	}
 	
 	public override void UseOutOfCombat () {

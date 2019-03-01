@@ -20,7 +20,8 @@ public class SecurityHologram : Character {
 	
 	public TimedMethod[] Firewall() {
 		Status.firewall = true;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " set up a firewall around itself and your lead"})}; 
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Firewall"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " set up a firewall around itself and your lead"})}; 
 	}
 	
 	public TimedMethod[] Flash() {
@@ -28,13 +29,16 @@ public class SecurityHologram : Character {
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			blindPart = Party.GetPlayer().status.Blind(3);
 		} else {
-			blindPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
+			blindPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
+		Attacks.SetAudio("Fire Hit", 6);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " fired photons"}),
-	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, GetAccuracy(), true, true, false}), blindPart[0]};
+		    new TimedMethod(0, "Audio", new object[] {"Laser Shot"}),
+	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, GetAccuracy(), true, true, false}), blindPart[0], blindPart[1]};
 	}
 	
 	public TimedMethod[] Discharge() {
+		Attacks.SetAudio("Shock", 15);
 		TimedMethod move;
 		string message;
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
@@ -44,7 +48,7 @@ public class SecurityHologram : Character {
 			move = new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false});
 			message = ToString() + " discharged electricity...but just missed";
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message}), move};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message}), new TimedMethod(0, "Audio", new object[] {"Tazer"}), move};
 	}
 	
 	public override void CreateDrops() {

@@ -4,7 +4,7 @@ public class EnglishMajor : Character {
 		health = 15; maxHP = 15; strength = 2; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 14; accuracy = 14; dexterity = 4; evasion = 0; type = "English Major"; passive = new Reading(this);
 		quirk = Quirk.GetQuirk(this); special = new Quote(); special2 = new Read(); 
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "switch out";
 	}
 	
 	public override TimedMethod[] AI () {
@@ -39,16 +39,19 @@ public class EnglishMajor : Character {
 		    	}
     		}
      	}
-		TimedMethod[] moves = new TimedMethod[attackPart.Length + 2];
+		Attacks.SetAudio("Blunt Hit", 20);
+		TimedMethod[] moves = new TimedMethod[attackPart.Length + 3];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
-		attackPart.CopyTo(moves, 1);
+		moves[1] = new TimedMethod(0, "AudioAfter", new object[] {"Big Swing", 10});
+		attackPart.CopyTo(moves, 2);
 		moves[moves.Length - 1] = switchPart;
 		return moves;
 	}
 	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("Blunt Hit", 20);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung a dictionary"}),
-		new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+		new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "AudioAfter", new object[] {"Big Swing", 10}),
 		new TimedMethod(0, "Attack", new object[] {false})};
 	}
 	
@@ -57,7 +60,8 @@ public class EnglishMajor : Character {
 	    	Party.GetPlayer().GainCharge(3);
 		    Party.GetPlayer().GainDefense(-2);
 			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"EnglishTaunt"}), 
-			    new TimedMethod(60, "Log", new object[] {ToString() + " insulted in old English. Defense down and charge up"})};
+			    new TimedMethod(60, "Log", new object[] {ToString() + " insulted in old English. Defense down and charge up"}),
+				new TimedMethod(0, "Audio", new object[] {"Nullify"})};
 		} else {
 			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"EnglishTaunt"}), 
 			    new TimedMethod(60, "Log", new object[] {ToString() + " insulted in old English. It went over your head"})};
@@ -66,8 +70,8 @@ public class EnglishMajor : Character {
 	
 	public TimedMethod[] Argument() {
 		power = System.Math.Max(power, 0); charge = System.Math.Min(charge + 5, 5);
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}), new TimedMethod(60, "Log", new object[] {
-			ToString() + " constructed an argument. Attack debuffs removed and charge up"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}), new TimedMethod(0, "AudioAfter", new object[] {"Clean", 20}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " constructed an argument. Attack debuffs removed and charge up"})};
 	}
 	
 	public override void CreateDrops() {

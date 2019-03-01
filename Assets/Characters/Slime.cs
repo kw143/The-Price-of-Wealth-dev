@@ -19,29 +19,33 @@ public class Slime : Character {
 	}
 	
 	public TimedMethod[] Slam() {
+		Attacks.SetAudio("Blunt Hit", 10);
 		TimedMethod[] poisonPart;
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			poisonPart = Party.GetPlayer().status.Poison(2);
 		} else {
-			poisonPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
+			poisonPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " made a ramming attack"}),
-    		new TimedMethod(0, "StagnantAttack", new object[] {false, 4, 4, GetAccuracy(), true, true, false}), poisonPart[0]};
+		    new TimedMethod(0, "Audio", new object[] {"Slime"}),
+    		new TimedMethod(0, "StagnantAttack", new object[] {false, 4, 4, GetAccuracy(), true, true, false}), poisonPart[0], poisonPart[1]};
 	}
 	
 	public TimedMethod[] Heal() {
 		Heal(5);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is regenerating"})};
+		return new TimedMethod[] {new TimedMethod(0, "AudioAfter", new object[] {"Heal", 20}),
+    		new TimedMethod(60, "Log", new object[] {ToString() + " is regenerating"})};
 	}
 	
 	public TimedMethod[] Creep() {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " crept forward"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " crept forward"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public override void Damage (int amount) {
 		health = System.Math.Max(health - amount, 0);
 		Party.GetPlayer().status.Goop();
-		if (health > 0) {
+		if (health > 0 && Party.enemyCount < 4) {
 			Character splitted = new Slime();
 			Party.AddEnemy(splitted);
 			splitted.SetMaxHP(maxHP);

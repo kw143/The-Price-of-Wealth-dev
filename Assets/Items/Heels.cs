@@ -7,7 +7,9 @@ public class Heels : Item {
 	
 	public override TimedMethod[] Use() {
 		Party.AddItem(new Heels(uses - 1));
-		return new TimedMethod[] {new TimedMethod(0, "StagnantAttack", new object[] {true, Party.GetPlayer().GetStrength(),
+		Attacks.SetAudio("Knife", 10);
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
+		    new TimedMethod(0, "StagnantAttack", new object[] {true, Party.GetPlayer().GetStrength(),
 	    	Party.GetPlayer().GetStrength() + 5, Party.GetPlayer().GetAccuracy(), true, true, true})};
 	}
 }

@@ -6,6 +6,7 @@ public class Oil : Item {
 		if (Attacks.EvasionCycle(Party.GetPlayer(), Party.GetEnemy())) {
 			Party.GetEnemy().SetDefense(Party.GetEnemy().GetDefense() - 2);
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Defense decreased by 2"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Oil"}),
+		    new TimedMethod(60, "Log", new object[] {"Defense decreased by 2"})};
 	}
 }

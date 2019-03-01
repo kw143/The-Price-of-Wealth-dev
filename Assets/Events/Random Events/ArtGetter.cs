@@ -32,19 +32,27 @@ public static class ArtGetter {
 		room.Add(new ArtMediumBattle());
 		room.Add(new ArtEasyBattleP());
 		room.Add(new ArtEasyBattleP());
+		room.Add(new Librarian());
+		room.Add(new ArtEasyBattleR());
 		gallery.Add(new ArtMediumBattle());
 		gallery.Add(new ArtMediumBattle());
 		gallery.Add(new ArtMediumBattle());
+		gallery.Add(new LaserGallery());
+		gallery.Add(new ArtAppreciator());
 		stage.Add(new ArtHardBattle());
+		stage.Add(new ArtHardBattle());
+		stage.Add(new PossessedOrchestra());
 	    stage.Add(new Event("Students are attempting to put together a show to take mind off the times", new LinkedList<TimedMethod>(new TimedMethod[] {
 		    new TimedMethod(0, "GainSP", new object[] {3}), new TimedMethod("Resolve")}), new LinkedList<TimedMethod>(new TimedMethod[] {
-			new TimedMethod(0, "GainSP", new object[] {-5}), new TimedMethod(0, "Item", new object[] {new Item[] {new VotedBadge(), new Donut()}}),
-			new TimedMethod("Resolve")}), new LinkedList<TimedMethod>(new TimedMethod[] {new TimedMethod(0, "Battle", new object[] {
+			new TimedMethod(0, "GainSP", new object[] {-5}), new TimedMethod(0, "Item", new object[] {new Item[] {new VotedBadge(), new Donut()}})}),
+			new LinkedList<TimedMethod>(new TimedMethod[] {new TimedMethod(0, "Battle", new object[] {
 			new Character[] {new DanceMajor(), new MusicMajor(), new HistoryMajor(), new EnglishMajor()}}),
 			new TimedMethod(0, "Item", new object[] {new Item[] {new Tuba(), new Heels(), new Donut(), new Textbook()}})}),
 			null, "Watch the show. Gain 3 SP", "Assist the group. Lose 5 SP and gain 2 items", "Mug them for all the items", null));
 		recep.Add(new ArtHardBattle());
 		store.Add(new ArtEasyBattleR());
+		store.Add(new RestRoom());
+		store.Add(new ArtEasyBattleP());
 		store.Add(new ItemEvent(new Item[] {new Tuba(), new Tuba(), new Metronome(), new Baton()},
     		"You found the storage room for the music building"));
 		final.Add(new Event("The art gallery is so peaceful", new LinkedList<TimedMethod>(

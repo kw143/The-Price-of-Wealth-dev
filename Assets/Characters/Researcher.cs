@@ -19,8 +19,9 @@ public class Researcher : Character {
 	}
 	
 	public TimedMethod[] Explosive() {
+		Attacks.SetAudio("S Explosion", 15);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " threw an explosive flask"}),
-		    new TimedMethod(0, "Audio", new object[] {"Skill3"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skill3"}), new TimedMethod(0, "AudioAfter", new object[] {"Glass Break", 15}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 6, 6, GetAccuracy(), true, true, false})};
 	}
 	
@@ -29,18 +30,19 @@ public class Researcher : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 			poisonPart = Party.GetPlayer().status.Poison(2);
 		} else {
-			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"miss"})};
+			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"miss"}), new TimedMethod("Null")};
 		}
-	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " threw a toxic brew"}),
-		new TimedMethod(0, "Audio", new object[] {"Skill3"}), poisonPart[0]};
+	    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill3"}), new TimedMethod(0, "Audio", new object[] {"Clean"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " threw a toxic brew"}), poisonPart[0], poisonPart[1]};
 	}
 	
 	public TimedMethod[] Shock() {
+		Attacks.SetAudio("Shock", 10);
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			Status.NullifyDefense(Party.GetPlayer());
 		}
 	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used electric wires"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}), 
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, GetAccuracy(), true, true, true})};
 	}
 	

@@ -4,7 +4,7 @@ public class Tumble : Special {
 	
 	public override TimedMethod[] Use () {
 		Party.GetPlayer().SetEvasion(Party.GetPlayer().GetEvasion() * 2);
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "Audio", new object[] {"Running"}),
 		    new TimedMethod(60, "Log", new object[] {"Evasion was doubled"})};
 	}
 }

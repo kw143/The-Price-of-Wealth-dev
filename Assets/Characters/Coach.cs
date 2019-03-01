@@ -29,17 +29,20 @@ public class Coach : Character {
 	}
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Blunt Hit", 30);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " threw a football"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Switch () {
 		if (GetGooped()) {
 			status.gooped = false;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " escaped the goop"})};
+			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " escaped the goop"}),
+			    new TimedMethod(0, "Audio", new object[] {"Clean"})};
 		}
 		if (Party.enemyCount > 1) {
+			Attacks.SetAudio("BluntHit", 10);
 			int former = Party.enemySlot;
 			for (int i = 0; i < 4; i++) {
 				if (i != Party.enemySlot - 1 && Party.enemies[i] != null && Party.enemies[i].GetAlive()) {
@@ -51,7 +54,8 @@ public class Coach : Character {
 			}
 		}
 		Party.AddEnemy(new FootballPlayer());
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " called a backup player"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Whistle"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " called a backup player"})};
 	}
 	
 	public override void CreateDrops() {

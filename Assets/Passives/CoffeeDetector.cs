@@ -9,7 +9,8 @@ public class CoffeeDetector : Passive {
 		if (player) {enemy = Party.GetEnemy();} else {enemy = Party.GetPlayer();}
 		if (!used && enemy.status.caffeine > 0) {
 			used = true; self.SetPower(self.GetPower() + 10);
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {self.ToString() + " became HYPER at the smell of coffee"})};
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Recursion"}),
+			   new TimedMethod(60, "Log", new object[] {self.ToString() + " became HYPER at the smell of coffee"})};
 		}
 		return new TimedMethod[0];
 	}

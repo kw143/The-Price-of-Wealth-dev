@@ -102,4 +102,8 @@ public class GameOver : MonoBehaviour {
 		Areas.Initialize();
 		SceneManager.LoadScene("Overworld");
 	}
+	
+	public void End () {
+		SceneManager.LoadScene("Start");
+	}
 }

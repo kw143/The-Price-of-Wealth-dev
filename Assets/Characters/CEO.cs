@@ -66,10 +66,10 @@ public class CEO : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 			poisonPart = Party.GetPlayer().status.Poison(3);
 		} else {
-			poisonPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {""})};
+			poisonPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOLaugh"}),
-		    new TimedMethod(60, "Log", new object[] {"The CEO used contraband"}), poisonPart[0]};
+		    new TimedMethod(60, "Log", new object[] {"The CEO used contraband"}), poisonPart[0], poisonPart[1]};
 	}
 	
 	public TimedMethod[] Monopoly () {
@@ -84,20 +84,24 @@ public class CEO : Character {
 			horiz = false;
 			vert = true;
 			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOTaunt"}),
+			    new TimedMethod(0, "AudioAfter", new object[] {"Coin", 30}),
 			    new TimedMethod(60, "Log",new object[] {"The CEO switched to vertical integration. Attack is increasing"})};
 		} else if (vert) {
 			horiz = true;
 			vert = false;
 			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOTaunt"}),
+			    new TimedMethod(0, "AudioAfter", new object[] {"Coin", 30}),
 			    new TimedMethod(60, "Log",new object[] {"The CEO switched to horizontal integration. Guard is increasing"})};
 		} else {
 			if (rng.Next(2) == 0) {
 			    horiz = true;
-				return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOTaunt"}), new TimedMethod(60, "Log",new object[] {
+				return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOTaunt"}), 
+				    new TimedMethod(0, "AudioAfter", new object[] {"Coin", 30}), new TimedMethod(60, "Log",new object[] {
 					"The CEO has horizontal integration. Guard will increase by 5 at the start of his turns"})};
 			} else {
 			    vert = true;
-				return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOTaunt"}), new TimedMethod(60, "Log",new object[] {
+				return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CEOTaunt"}),
+    				 new TimedMethod(0, "AudioAfter", new object[] {"Coin", 30}), new TimedMethod(60, "Log",new object[] {
 					"The CEO has vertical integration. Charge will increase by 5 at the start of his turns"})};
 			}			
 		}
@@ -105,8 +109,10 @@ public class CEO : Character {
 	
 	public TimedMethod[] Attack() {
 		summonCount++;
+		Attacks.SetAudio("Coin", 20);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The CEO attacked"}),
 		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+			 new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 5, 5, GetAccuracy(), true, true, false})};
 	}
 	
@@ -143,13 +149,15 @@ public class CEO : Character {
 			current.SetRecruitable(false);
 			Party.AddEnemy(current);
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The CEO attracted 2 customers"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Recruit"}),
+    		new TimedMethod(60, "Log", new object[] {"The CEO attracted 2 customers"})};
 	}
 	
 	public TimedMethod[] Switch() {
 		if (GetGooped()) {
 			status.gooped = false;
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The CEO cleaned the goop and hated it"})};
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Clean"}),
+			    new TimedMethod(60, "Log", new object[] {"The CEO cleaned the goop and hated it"})};
 		}
 		for (int i = 1; i < 4; i++) {
 			if (Party.enemies[i] != null && Party.enemies[i].GetAlive()) {

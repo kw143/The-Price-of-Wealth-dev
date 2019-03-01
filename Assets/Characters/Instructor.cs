@@ -17,19 +17,22 @@ public class Instructor : Character {
 		} else if (cycle) {
 		    if (Party.GetPlayer().GetAsleep()) {
 				charge = charge + 2;
-				return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " is seething. Charge+2"}),
+				return new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Fire"}),
+    				new TimedMethod(60, "Log", new object[] {ToString() + " is seething. Charge+2"}),
 				    new TimedMethod("GetEnemy")};
 			} else {
 				cycle = false;
+				Attacks.SetAudio("Slap", 10);
 				return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " unleashed her wrath"}),
-				    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+				    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 				    new TimedMethod(0, "StagnantAttack", new object[] {false, 1, 1, GetAccuracy(), true, true, false})};
 			}
 		} else {
 			System.Random rnd = new System.Random();
 			if (rnd.Next(3) != 0) {
+				Attacks.SetAudio("Slap", 10);
 				return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " attacked"}),
-				    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+				    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
    				    new TimedMethod(0, "StagnantAttack", new object[] {false, 1, 1, GetAccuracy(), true, true, false})};
 			} else {
 				cycle = true;
@@ -43,10 +46,10 @@ public class Instructor : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    sleepPart = Party.GetPlayer().status.Sleep();
 		} else {
-			sleepPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It went over your head"})};
+			sleepPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It went over your head"}), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}),
-		    new TimedMethod(60, "Log", new object[] {ToString() + " lectured"}), sleepPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Blah"}), new TimedMethod(0, "Audio", new object[] {"Filibuster"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " lectured"}), sleepPart[0], sleepPart[1]};
 	}
 	
 	public override void CreateDrops() {

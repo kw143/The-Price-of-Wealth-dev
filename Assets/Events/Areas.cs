@@ -69,6 +69,8 @@ public static class Areas {
 		Dungeon.fled = false;
 		tutorialPlayed = false;
 		location = Map.currentPosition;
+		Score.Reset();
+		Investigate.Initialize();
 	}
 	
 	/**

@@ -5,8 +5,8 @@ public class GoldenPizza : Item {
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(100);
 		Party.members[i].status.poisoned = 0;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
-			Party.members[i].GetName() + " ate the golden pizza. Despite the food coloring, it was exquisite"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "Audio", new object[] {"Heal"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate the golden pizza. Despite the food coloring, it was exquisite"})};
 	}
 
     public override void UseOutOfCombat(int i) {

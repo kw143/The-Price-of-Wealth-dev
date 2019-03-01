@@ -9,7 +9,7 @@ public class Tactics : Special {
 				c.GainEvasion(4);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), 
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(0, "Audio", new object[] {"Recruit"}),
 		    new TimedMethod(60, "Log", new object[] {Party.members[i].ToString() + " implemented tactics"})};
 	}
 }

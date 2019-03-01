@@ -24,34 +24,39 @@ public class Cop : Character {
 	}
 	
 	public TimedMethod[] Tazer() {
+		Attacks.SetAudio("Tazer", 5);
 		TimedMethod[] stunPart;
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 		    stunPart = Party.GetPlayer().status.Stun(2);
 		} else {
-			stunPart = new TimedMethod[] {new TimedMethod(0, "Log", new object[] {""})};
+			stunPart = new TimedMethod[] {new TimedMethod("Null"), new TimedMethod("Null")};
 		}
 	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " fired a tazer"}),
-            new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),		
-		    new TimedMethod(0, "StagnantAttack", new object[] {false, 6, 6, GetAccuracy(), true, true, true}), stunPart[0]};
+            new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "Audio", new object[] {"Button"}),
+		    new TimedMethod(0, "StagnantAttack", new object[] {false, 6, 6, GetAccuracy(), true, true, true}), stunPart[0], stunPart[1]};
 	}
 	
 	public TimedMethod[] Shoot() {
+		Attacks.SetAudio("Blunt Hit", 6);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " shot a pistol"}), 
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(0, "AudioAfter", new object[] {"Gunfire", 6}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 10, 10, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Donut() {
 		Heal(15); power -= 1; defense -= 1;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " ate a donut"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "AudioAfter", new object[] {"Heal", 30}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " ate a donut"})};
 	}
 	
 	public TimedMethod[] Whistle() {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 			Status.NullifyAttack(Party.GetPlayer());
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " blew a whistle. Attack was reset"})};
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Whistle"}), new TimedMethod(0, "AudioAfter", new object[] {"Nullify", 60}), 
+			    new TimedMethod(60, "Log", new object[] {ToString() + " blew a whistle. Attack was reset"})};
 		} else {
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " blew a whistle, and nothing happened"})};
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Whistle"}),
+			    new TimedMethod(60, "Log", new object[] {ToString() + " blew a whistle, and nothing happened"})};
 		}
 	}
 	

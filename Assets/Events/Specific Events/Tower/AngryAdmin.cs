@@ -21,6 +21,8 @@ public class AngryAdmin : Event {
     			Party.members[Party.playerSlot - 1].ToString();
 			badEvent.options1 = new LinkedList<TimedMethod>();
 			badEvent.options1.AddLast(new TimedMethod(0, "Damage", new object[] {5}));
+			badEvent.options1.AddLast(new TimedMethod("Resolve"));
+			badEvent.optionText1 = "Oh no";
 			options2.AddLast(new TimedMethod(0, "ChooseMember", new object[] {Party.playerSlot - 1}));
 			options2.AddLast(new TimedMethod(0, "CauseEvent", new object[] {badEvent}));
 		}

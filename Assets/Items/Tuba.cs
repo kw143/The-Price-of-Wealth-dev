@@ -7,6 +7,6 @@ public class Tuba : Item {
 		    Status.NullifyAttack(Party.GetEnemy()); Status.NullifyDefense(Party.GetEnemy());
 		}
 		string message = Party.GetPlayer().GetName() + " blasted the tuba!";
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {message})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Trumpet"}), new TimedMethod(60, "Log", new object[] {message})};
 	}
 }

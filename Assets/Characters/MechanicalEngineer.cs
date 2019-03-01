@@ -4,7 +4,7 @@ public class MechanicalEngineer : Character {
 		health = 18; maxHP = 18; strength = 3; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 16; accuracy = 16; dexterity = 3; evasion = 0; type = "Mechanical Engineering Major"; passive = new Car(this);
 		quirk = Quirk.GetQuirk(this); special2 = new TeamAttack(); special = new OilDump();
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "enemy loses 1 guard";
 	}
 	
 	public override TimedMethod[] AI () {
@@ -33,13 +33,16 @@ public class MechanicalEngineer : Character {
 		if (hit) {
 			Party.GetEnemy().GainGuard(-1);
 		}
+		Attacks.SetAudio("Metal Hit", 20);
 		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4});
+		moves[1] = new TimedMethod(0, "Audio", new object[] {"Big Swing"});
 		attackPart.CopyTo(moves, 1);
 		return moves;
 	}
 	
 	public TimedMethod[] TeamAttack() {
+		Attacks.SetAudio("Blunt Hit", 15);
 		TimedMethod[] moves = new TimedMethod[Party.enemyCount + 2];
 		moves[0] = new TimedMethod(60, "Log", new object[] {ToString() + " led a team attack"});
 		moves[1] = new TimedMethod(0, "Audio", new object[] {"Skill2"});
@@ -60,17 +63,19 @@ public class MechanicalEngineer : Character {
 	}
 	
 	public TimedMethod[] Wrench() {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung a wrench"}), 
+		Attacks.SetAudio("Metal Hit", 20);
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " swung a wrench"}),
+    		new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}), new TimedMethod(60, "Attack", new object[] {false})};
 	}
 	
 	public TimedMethod[] Oil() {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 			Party.GetPlayer().GainDefense(- 2);
-		    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}),
+		    return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(0, "AudioAfter", new object[] {"Oil", 10}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " dumped oil. Defense down"})};
 		} else {
-			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), 
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}), new TimedMethod(0, "AudioAfter", new object[] {"Drink", 10}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " dumped oil. It missed"})};
 		}		
 	}

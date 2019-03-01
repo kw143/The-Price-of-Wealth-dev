@@ -29,29 +29,32 @@ public class Doctor : Character {
 		}
 		if (Party.enemies[index].GetAlive()) {
 			Party.enemies[index].Heal(5);
-			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "Audio", new object[] {"Heal"}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " treated " + Party.enemies[index].ToString()})};
 		} else {
 			Party.enemies[index].SetAlive(true);
 			Party.enemies[index].Heal(1);
 			Party.enemyCount++;
-			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "AudioAfter", new object[] {"Tazer", 20}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " revived " + Party.enemies[index].ToString()})};
 		}
 	}
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Knife", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used operating tools"}), 
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 7, 7, GetAccuracy(), true, true, true})};
 	}
 	
 	public TimedMethod[] Anasthesia() {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
+			TimedMethod[] sleepPart = Party.GetPlayer().status.Sleep();
 			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " injected anasthesia"}),
-    			Party.GetPlayer().status.Sleep()[0]}; 
+			    new TimedMethod(0, "Audio", new object[] {"Clean"}), sleepPart[0], sleepPart[1]}; 
 		} else {
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " missed anasthesia"})}; 
+			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " missed anasthesia"}),
+			    new TimedMethod(0, "Audio", new object[] {"Clean"})}; 
 		}
 	}
 	

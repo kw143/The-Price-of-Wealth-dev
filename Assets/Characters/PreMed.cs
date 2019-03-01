@@ -4,7 +4,7 @@ public class PreMed : Character {
 		health = 16; maxHP = 16; strength = 4; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 16; accuracy = 16; dexterity = 2; evasion = 0; type = "Pre-Med Student"; passive = new Precision(this);
 		quirk = Quirk.GetQuirk(this); special = new Triage(); special2 = new Prescribe(); 
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "pierce defense";
 	}
 	
 	public override TimedMethod[] AI () {
@@ -26,28 +26,32 @@ public class PreMed : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy(), strength, strength + 5, GetAccuracy(), true, true, true);
 		}
+		Attacks.SetAudio("Knife", 10);
 		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2});
+		moves[1] = new TimedMethod(0, "Audio", new object[] {"Small Swing"});
 		attackPart.CopyTo(moves, 1);
 		return moves;
 	}
 	
 	public TimedMethod[] Treat() {
 		System.Random rng = new System.Random();
-		Heal(8 + rng.Next(5));
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+		Heal(6 + rng.Next(5));
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "Audio", new object[] {"Heal"}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " healed themself"})};
 	}
 	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("Knife", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used a surgical knife"}),
-		new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
-		new TimedMethod(0, "StagnantAttack", new object[] {false, 4, 4, GetAccuracy(), true, true, true})};
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
+	    	new TimedMethod(0, "StagnantAttack", new object[] {false, 4, 4, GetAccuracy(), true, true, true})};
 	}
 	
 	public TimedMethod[] Steroid() {
 		power += 2; defense -= 1;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used steroids. Power up and defense down"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Poison Damage"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " used steroids. Power up and defense down"})};
 	}
 	
 	public override void CreateDrops() {

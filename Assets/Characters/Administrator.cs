@@ -47,7 +47,7 @@ public class Administrator : Character {
 			current.SetRecruitable(false);
 			Party.AddEnemy(current);
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Audio", new object[] {"AdminSummon"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"AdminSummon"}),
     		new TimedMethod(60, "Log", new object[] {ToString() + " called in two underlings"})};
 	}
 	
@@ -69,12 +69,14 @@ public class Administrator : Character {
 	
 	public TimedMethod[] Fire () {
 		charge += 10;
-		return new TimedMethod[] {new TimedMethod(60, "Audio", new object[] {"AdminFired"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"AdminFired"}), new TimedMethod(0, "Audio", new object[] {"Fire"}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " fired the underlings in anger. Charge +10"})};
 	}
 	
 	public TimedMethod[] Attack() {
+		Attacks.SetAudio("Blunt Hit", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " attacked"}), 
+		    new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	

@@ -5,7 +5,8 @@ public class Calculator : Item {
 	public override TimedMethod[] Use() {
 		Party.GetPlayer().GainAccuracy(5);
 		Party.AddItem(this);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"Accuracy was increased"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Wikipedia"}),
+		    new TimedMethod(60, "Log", new object[] {"Accuracy was increased"})};
 	}
 
 }

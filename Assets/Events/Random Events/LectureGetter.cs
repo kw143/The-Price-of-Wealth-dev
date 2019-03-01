@@ -23,13 +23,16 @@ public static class LectureGetter {
 		hall.Add(new LectureEasyBattleR());
 		hall.Add(new LectureEasyBattleR());
 		hall.Add(new LectureEasyBattleR());
+		hall.Add(new HallwaySkater());
 		room.Add(new LectureMediumBattle());
 		room.Add(new LectureMediumBattle());
 		room.Add(new LectureEasyBattleP());
 		room.Add(new LectureEasyBattleP());
 		room.Add(new LectureMediumBattle());
+		room.Add(new OfficeHours());
 		office.Add(new LectureEasyBattleP());
 		office.Add(new ItemEvent(new Item[] {new Coffee()}, "While snooping around, you find a legendary cup of coffee"));
+		office.Add(new FacultyCoven());
 		hard.Add(new LectureHardBattle());
 		lh.Add(new Event("2 groups of students are arguing about stem vs liberal arts. They immediatly demand you take a side",
 		    new LinkedList<TimedMethod>(new TimedMethod[] {new TimedMethod(0, "Heal", new object[] {5}), 
@@ -43,6 +46,8 @@ public static class LectureGetter {
 		lh.Add(new LectureHardBattle());
 		lh.Add(new LectureHardBattle());
 		lh.Add(new LectureHardBattle());
+		lh.Add(new PoliticalRally());
+		lh.Add(new TestEnvironment());
 		final.Add(new ItemEvent(new Item[] {new Exam()}, "Wow! it's a graded exam that got a 105"));
 	}
 	

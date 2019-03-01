@@ -23,26 +23,31 @@ public class LabRobot : Character {
 	
 	public TimedMethod[] Download() {
 		accuracy += 89; evasion += 30;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Wikipedia"}), new TimedMethod(60, "Log", new object[] {
 			ToString() + " downloaded relevant information. Accuracy and evasion way up"})};
 	}
 	
 	public TimedMethod[] Beam() {
+		Attacks.SetAudio("Fire Hit", 10);
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			Party.GetPlayer().GainDefense(-1);
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " fired a beam"}),
+		    new TimedMethod(0, "Audio", new object[] {"Laser Shot"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 3, 3, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Slice() {
+		Attacks.SetAudio("Sword", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " slashed"}),
+    		new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 7, 7, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Reinforce() {
 		defense++;
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " reinforced itself. Defense + 1"})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Metal Hit"}),
+    		new TimedMethod(60, "Log", new object[] {ToString() + " reinforced itself. Defense + 1"})};
 	}
 	
 	public override void CreateDrops() {

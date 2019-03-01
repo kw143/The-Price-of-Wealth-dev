@@ -22,11 +22,14 @@ public class CampaignManager : Character {
 	}
 	
 	public TimedMethod[] Plan() {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " devised a plan"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " devised a plan"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public TimedMethod[] Attack () {
+		Attacks.SetAudio("Blunt Hit", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " defended the campaign"}),
+		    new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 5, 5, GetAccuracy(), true, true, false})};
 	}
 	
@@ -39,7 +42,8 @@ public class CampaignManager : Character {
 		pol.cycle = 4;
 		Status.NullifyAttack(pol);
 		Status.NullifyDefense(pol);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " Caused the politician's grand return"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Finale"}), new TimedMethod(0, "AudioAfter", new object[] {"Nullify", 30}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " Caused the politician's grand return"}),
 		    new TimedMethod(0, "EnemySwitch", new object[] {1, 2})};
 	}
 }

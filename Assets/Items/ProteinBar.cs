@@ -5,7 +5,8 @@ public class ProteinBar : Item {
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(5);
 		Party.members[i].SetPower(Party.members[i].GetPower() + 1);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate a protein bar. Yay protein."})};
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}),
+		    new TimedMethod(60, "Log", new object[] {Party.members[i].GetName() + " ate a protein bar. Yay protein."})};
 	}
 
     public override void UseOutOfCombat(int i) {

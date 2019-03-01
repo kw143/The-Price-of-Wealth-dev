@@ -21,7 +21,7 @@ public class Map : MonoBehaviour {
 			spotlight.GetComponent<AreaSpotlight>().SetLocation(Areas.location);
 		}
 		if (!Areas.tutorialPlayed) {
-			Areas.tutorialPlayed = false;
+			Areas.tutorialPlayed = true;
 			help.Open();
 		}
 		map.transform.Find("Current Location").gameObject.GetComponent<Text>().text = "Current location: " + currentPosition;

@@ -50,10 +50,11 @@ public class PizzaCultist : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    blindPart = Party.GetPlayer().status.Blind(6);
 		} else {
-			blindPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"})};
+			blindPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"}), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultistSpell", 2}), 
-		    new TimedMethod(60, "Log", new object[] {ToString() + " cast CHEESE SPELL!"}), blindPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultistSpell", 2}),
+    		new TimedMethod(0, "AudioAfter", new object[] {"Cheese", 30}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " cast CHEESE SPELL!"}), blindPart[0], blindPart[1]};
 	}
 	
 	public virtual TimedMethod[] TomatoSpell () {
@@ -61,41 +62,49 @@ public class PizzaCultist : Character {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
 		    goopPart = Party.GetPlayer().status.Goop();
 		} else {
-			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"})};
+			goopPart = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"It missed completely"}), new TimedMethod("Null")};
 		}
-		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultistSpell", 2}), 
-		    new TimedMethod(60, "Log", new object[] {ToString() + " cast TOMATO SPELL!"}), goopPart[0]};
+		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultistSpell", 2}),
+    		new TimedMethod(0, "AudioAfter", new object[] {"Cheese", 30}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " cast TOMATO SPELL!"}), goopPart[0], goopPart[1]};
 	}
 	
 	public virtual TimedMethod[] PepperoniSpell () {
+		Attacks.SetAudio("Slap", 10);
 		TimedMethod move;
 		if (GetAccuracy() > Party.GetPlayer().GetEvasion()) {
 		    move = new TimedMethod(0, "AttackAll", new object[] {false, 2, 2, accuracy, true});
 		} else {
 			move = new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, accuracy, true, true, false});
 		}
-		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultistSpell", 2}), 
+		return new TimedMethod[] {new TimedMethod(0, "AudioAmount", new object[] {"CultistSpell", 2}),
+    		new TimedMethod(0, "AudioAfter", new object[] {"Pepperoni Spell", 60}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " cast PEPPERONI SPELL!"}), move};
 	}
 	
 	public virtual TimedMethod[] Slicer () {
+		Attacks.SetAudio("Knife", 30);
 	    return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " chucked the pizza slicer"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 5, 6}), new TimedMethod(0, "Audio", new object[] {"Knife Throw"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 10, 10, GetAccuracy(), true, true, false})};	
 	}
 	
 	public virtual TimedMethod[] Attack () {
-		 return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " attacked sadly"}),
+		Attacks.SetAudio("Blunt Hit", 10);
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " attacked sadly"}),
+    		new TimedMethod(0, "Audio", new object[] {"Small Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 2, 2, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Despair () {
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"CultistOut"}), 
-		    new TimedMethod(60, "Log", new object[] {ToString() + " ran out of pizzas"})};
+		    new TimedMethod(60, "Log", new object[] {ToString() + " ran out of pizzas"}),
+			    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public TimedMethod[] Sulk () {
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " wished he had more pizza"})};
+		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " wished he had more pizza"}),
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 	}
 	
 	public override void CreateDrops() {

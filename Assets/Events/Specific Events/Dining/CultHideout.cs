@@ -5,8 +5,8 @@ public class CultHideout : Event {
 	public CultHideout () {}
 	
 	public override void Enact () {
-		text = "Chants are heard from within the kitchen. They are in a strange langua-, nope, just saying pizza over and over again"
-		    + "You feel a tap on your shoulder and smell burnt crust";
+		text = "Chants are heard from within the kitchen. They are in a strange langua-, nope, just saying pizza over and over again."
+		    + " You feel a tap on your shoulder and smell burnt crust";
 		ItemEvent reward = new ItemEvent(new Item[] {new AccuracyPotion(), new Antibiotics(), new Sword(), new Pizza()}, "It seems " 
 		    + "the robot was guarding something important");
 		options1 = new LinkedList<TimedMethod>();

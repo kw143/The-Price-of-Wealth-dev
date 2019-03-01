@@ -25,27 +25,32 @@ public class Surgeon : Doctor {
 	}
 	
 	public TimedMethod[] Operate() {
+		Attacks.SetAudio("Knife", 10);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " performed deadly surgery under proper conditions"}),
-		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+		    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), new TimedMethod(0, "Audio", new object[] {"Finale"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 30, 30, GetAccuracy(), true, true, true})};
 	}
 	
 	public TimedMethod[] Overdose() {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
-			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
-			    new TimedMethod(60, "Log", new object[] {ToString() + " prescribed an overdose"}), Party.GetPlayer().status.Poison(2)[0]}; 
+			TimedMethod[] poisonPart = Party.GetPlayer().status.Poison(2);
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "Audio", new object[] {"Drink"}),
+			    new TimedMethod(60, "Log", new object[] {ToString() + " prescribed an overdose"}), poisonPart[0], poisonPart[1]}; 
 		} else {
-			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}),
+			return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill1"}), new TimedMethod(0, "Audio", new object[] {"Glass Break"}),
 				new TimedMethod(60, "Log", new object[] {ToString() + " prescribed an overdose...but the handwriting was too poor"})}; 
 		}
 	}
 	
 	public TimedMethod[] Restrain() {
 		if (Attacks.EvasionCycle(this, Party.GetPlayer())) {
-			return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " used a straight jacket"}),
-			    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), Party.GetPlayer().status.Goop()[0]}; 
+			TimedMethod[] goopPart = Party.GetPlayer().status.Goop();
+			return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}), 
+			    new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
+			    new TimedMethod(60, "Log", new object[] {ToString() + " used a straight jacket"}), goopPart[0], goopPart[1]}; 
 		} else {
 			return new TimedMethod[] {new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 1, 2}),
+    			new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 			    new TimedMethod(60, "Log", new object[] {ToString() + " missed a straight jacket"})}; 
 		}
 	}

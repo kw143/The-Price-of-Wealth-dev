@@ -31,7 +31,9 @@ public class GrandConductor : Conductor {
 				c.GainCharge(10);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"ConductorCount"}),
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"ConductorCount"}),  new TimedMethod(0, "Audio", new object[] {"Button"}),
+		    new TimedMethod(0, "AudioAfter", new object[] {"Button", 15}),  new TimedMethod(0, "AudioAfter", new object[] {"Button", 15}),
+			new TimedMethod(0, "AudioAfter", new object[] {"Button", 15}),
 		    new TimedMethod(60, "Log", new object[] {ToString() + " initiated the performance. All charge up"})};
 	}
 	
@@ -41,7 +43,8 @@ public class GrandConductor : Conductor {
 				c.GainPower(3);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " called upon a forte. All power up"})};
+		return new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Trumpet"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " called upon a forte. All power up"})};
 	}
 	
 	public TimedMethod[] Piano() {
@@ -50,7 +53,8 @@ public class GrandConductor : Conductor {
 				c.Heal(6);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " called upon a piano. Team was healed"})};
+		return new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Piano"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " called upon a piano. Team was healed"})};
 	}
 	
 	public TimedMethod[] Allegro() {
@@ -59,7 +63,8 @@ public class GrandConductor : Conductor {
 				c.GainEvasion(8); c.GainAccuracy(1);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " called upon an allegro. All speed up"})};
+		return new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Allegro"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " called upon an allegro. All speed up"})};
 	}
 	
 	public TimedMethod[] Largo() {
@@ -68,7 +73,8 @@ public class GrandConductor : Conductor {
 				c.GainGuard(5); c.GainDefense(1);
 			}
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " called upon a largo. All defense up"})};
+		return new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Violin"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " called upon a largo. All defense up"})};
 	}
 	
 	public TimedMethod[] Summon() {
@@ -89,7 +95,8 @@ public class GrandConductor : Conductor {
 			current.SetRecruitable(false);
 			Party.AddEnemy(current);
 		}
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " led more performers to the scene"})};
+		return new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Recruit"}),
+		    new TimedMethod(60, "Log", new object[] {ToString() + " led more performers to the scene"})};
     }
 	
 	public override void CreateDrops () {

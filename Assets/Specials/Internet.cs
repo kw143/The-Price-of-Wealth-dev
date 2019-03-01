@@ -5,8 +5,9 @@ public class Internet : Special {
 	public override TimedMethod[] UseSupport(int i) {
 		Party.GetPlayer().SetEvasion(Party.GetPlayer().GetEvasion() + 8);
 		string[] lines = Party.GetEnemy().CSDescription();
-		TimedMethod[] returned = new TimedMethod[lines.Length];
-		int index = 0;
+		TimedMethod[] returned = new TimedMethod[lines.Length + 1];
+		returned[0] = new TimedMethod(0, "Audio", new object[] {"Wikipedia"});
+		int index = 1;
 		foreach (string s in lines) {
 			returned[index] = new TimedMethod(120, "Log", new object[] {s});
 			index++;

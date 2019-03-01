@@ -41,15 +41,23 @@ public static class HealthGetter {
 	    	new TimedMethod(0, "StatChange", new object[] {"Heal", 15}), new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("15 hp restored")})
 			})})}), null, null, null, "Heal", null, null, null));
 		room.Add(new HealthHardBattle());
+		room.Add(new TheDentist());
+		room.Add(new PristineMedicine());
+		room.Add(new MedicalSlime());
+		room.Add(new ReviveChoice());
+		room.Add(new HealthEasyBattleR());
+		room.Add(new HealthMediumBattle());
 		desk.Add(new HealthMediumBattle());
 		desk.Add(new HealthMediumBattle());
 		desk.Add(new ItemEvent(new Item[] {new Pencil(), new PinkSlip(), new Sanitizer()}, "This is an empty front desk, unlooted"));
+		desk.Add(new ZealousSecretary());
 		hard.Add(new HealthHardBattle());
 		store.Add(new ItemEvent(new Item[] {new Pencil(), new PinkSlip(), new Sanitizer()}, "This is an empty front desk, unlooted"));
 		store.Add(new Event("A room marked as contaminated appears to contain some useful supplies", new LinkedList<TimedMethod>(new TimedMethod[] {
 		    new TimedMethod(0, "Poison", new object[] {3}), new TimedMethod(0, "Item", new object[] {new Item[] {new Defibrilator(),
 		    new ToxicSolution(), new Wire(), new MysterySolution()}})}), new LinkedList<TimedMethod>(new TimedMethod[] {new TimedMethod("Resolve")}),
 			null, null, "Gather supplies (become poisoned next fight)", "Move on", null, null));
+		store.Add(new HealthEasyBattleR());
 		final.Add(new ItemEvent(new Item[] {new Defibrilator(), new Defibrilator(), new HealthPotion(), new HealthPotion()},
 		    "A collection of unlooted, very useful survival tools"));
 	}

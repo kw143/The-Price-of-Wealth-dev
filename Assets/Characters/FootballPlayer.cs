@@ -4,7 +4,7 @@ public class FootballPlayer : Character {
         health = 20; maxHP = 20; strength = 5; power = 0; charge = 0; defense = 0; guard = 0;
 		baseAccuracy = 10; accuracy = 10; dexterity = 2; evasion = 0; type = "Football Player"; passive = new PepTalk(this);
 		quirk = Quirk.GetQuirk(this); special2 = new Rally(); special = new Charge();
-		player = false; champion = false; recruitable = true; CreateDrops();
+		player = false; champion = false; recruitable = true; CreateDrops(); attackEffect = "deal 2 more damage";
 	}
 
 	
@@ -13,8 +13,9 @@ public class FootballPlayer : Character {
 		int seed = rnd.Next(10);
 		TimedMethod[] moves;
 		if (seed < 5) {
+			Attacks.SetAudio("Blunt Hit", 45);
 			moves = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " tackled "}),
-			    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),
+			    new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4}),  new TimedMethod(0, "Audio", new object[] {"Running"}),
 			    new TimedMethod(0, "StagnantAttack", new object[] {false, 5, 5, GetAccuracy(), true, true, false})};
 		} else if (seed < 8) {
 			moves = new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Skill2"}),
@@ -25,8 +26,9 @@ public class FootballPlayer : Character {
 				}
 			}
 		} else {
-			moves = new TimedMethod[] {new TimedMethod(60, "Log", new object[] {"The " + ToString() + " is guarding. Guard + 5"})
-			, new TimedMethod("GetEnemy")};
+			moves = new TimedMethod[] { new TimedMethod(0, "Audio", new object[] {"Metal Hit"}),
+			    new TimedMethod(60, "Log", new object[] {"The " + ToString() + " is guarding. Guard + 5"}),
+			    new TimedMethod("GetEnemy")};
 			SetGuard(GetGuard() + 5);
 		}
 		return moves;
@@ -39,8 +41,10 @@ public class FootballPlayer : Character {
 		} else {
 		    attackPart = Attacks.Attack(this, Party.GetEnemy(), strength + 2, strength + 7, GetAccuracy(), true, true, false);
 		}
+		Attacks.SetAudio("Blunt Hit", 45);
 		TimedMethod[] moves = new TimedMethod[attackPart.Length + 1];
 		moves[0] = new TimedMethod(0, "AudioNumbered", new object[] {"Attack", 3, 4});
+		moves[1] = new TimedMethod(0, "Audio", new object[] {"Running"});
 		attackPart.CopyTo(moves, 1);
 		return moves;
 	}

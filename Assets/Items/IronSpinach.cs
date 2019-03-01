@@ -5,7 +5,8 @@ public class IronSpinach : Item {
 	public override TimedMethod[] UseSelected(int i) {
 		Party.members[i].Heal(15);
 		Party.members[i].SetDefense(Party.members[i].GetDefense() + 5);
-		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {
+		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Eat"}), new TimedMethod(0, "Audio", new object[] {"Metal Hit"}),
+    		new TimedMethod(60, "Log", new object[] {
 			Party.members[i].GetName() + " ate the iron spinach. It tasted pretty bad"})};
 	}
 

@@ -23,7 +23,8 @@ public class Cooking : Passive {
 				    c.Heal(2);
 			    }
 		    }
-	    	return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {self.ToString() + "'s cooking restored health"})};
+	    	return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Heal"}),
+			    new TimedMethod(60, "Log", new object[] {self.ToString() + "'s cooking restored health"})};
 		}
 		return new TimedMethod[0];
 	}
