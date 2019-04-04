@@ -17,6 +17,7 @@ public class LaserGallery : Event {
 	    	    + " The paintings spin around revealing flamethrowers. The party is burned multiple times as they dash to the other side";
     		fail.options1 = new LinkedList<TimedMethod>();
 		    fail.options1.AddLast(new TimedMethod(0, "DamageAll", new object[] {6}));
+			fail.options1.AddLast(new TimedMethod("Resolve"));
 	    	fail.optionText1 = "6 damage to party";
     		options2.AddLast(new TimedMethod(0, "CauseEvent", new object[] {fail}));
 		} else {

@@ -1,7 +1,7 @@
 public class HealthPotion : Item {
 	
 	public HealthPotion() {
-    	name = "Health Potion"; description = "+3 MaxHP. Wouldn't it be great if Tristan remembered anything from Chem to name this right?";
+    	name = "Carbon"; description = "+3 MaxHP. Organic people are healthier";
 	    selects = true; price = 11; usableOut = true;
 	}
 	

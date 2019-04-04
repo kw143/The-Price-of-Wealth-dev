@@ -49,6 +49,7 @@ public class Character {
 	public Item[] drops;
 	//Attack description
 	public string attackEffect;
+	public int partyIndex;
 	
 	//This constructor is usually unused
 	public Character(int health, int maxHP, int strength, int accuracy,
@@ -195,7 +196,8 @@ public class Character {
 		//TimedMethod[] extra = status.Check(this);
 		if (GetAsleep() || GetStunned() || GetPassing()) {
 			status.passing = false;
-			return new TimedMethod[0];
+			return new TimedMethod[] {new TimedMethod(0, "CharLogSprite", new object[] {"SKIP", Party.enemySlot - 1, "skip", false}),
+			    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
 		} else { 
 		    return AI();
 		}

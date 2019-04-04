@@ -10,9 +10,11 @@ public class InitialRecruit : Event {
 		Character[] choices = GetChoices();
 		options1 = new LinkedList<TimedMethod>();
 		options1.AddLast(new TimedMethod(0, "Ally", new object[] {new Character[] {choices[0]}}));
+		options1.AddLast(new TimedMethod(0, "Resolve", null));
 		optionText1 = choices[0].type;
 		options2 = new LinkedList<TimedMethod>();
 		options2.AddLast(new TimedMethod(0, "Ally", new object[] {new Character[] {choices[1]}}));
+		options2.AddLast(new TimedMethod(0, "Resolve", null));
 		optionText2 = choices[1].type;
 		options3 = new LinkedList<TimedMethod>();
 		options3.AddLast(new TimedMethod(0, "Resolve", null));

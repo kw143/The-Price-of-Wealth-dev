@@ -20,7 +20,9 @@ public class Dungeon : MonoBehaviour {
 	public GameObject useItemMenu;
 	public GameObject nameMenu;
 	public GameObject dungeonMaps;
+	public GameObject replaceMember;
 	public bool isEvent;
+	public bool usingSpecial;
     public int y;
 	public int partyIndex;
 	public static bool fled;
@@ -320,12 +322,42 @@ public class Dungeon : MonoBehaviour {
 	
 	public void CancelItemUse () {
 		Party.AddItem(useItemMenu.GetComponent<PartyMenu>().item);
-		bagMenu.SetActive(true);
+		if (!usingSpecial) {
+		    bagMenu.SetActive(true);
+		} else {
+			usingSpecial = false;
+			nextMenu.SetActive(true);
+			if (isEvent) {
+			eventSpace.SetActive(true);
+		    } else {
+			dungeonMaps.SetActive(true);
+		    }
+		}
 		useItemMenu.SetActive(false);
 		useItemMenu.GetComponent<PartyMenu>().item = null;
 	}
 	
+	/*
 	public void ConfirmItemUse () {
+		useItemMenu.SetActive(false);
+		nextMenu.SetActive(true);
+		useItemMenu.GetComponent<PartyMenu>().item = null;
+		if (isEvent) {
+			eventSpace.SetActive(true);
+		} else {
+			dungeonMaps.SetActive(true);
+		}
+	}
+	*/
+	
+	public void ConfirmItemUse () {
+		if (usingSpecial) {
+			usingSpecial = false;
+			SpecialSelects();
+			return;
+		}
+		Item item = useItemMenu.GetComponent<PartyMenu>().item;
+		item.UseOutOfCombat(useItemMenu.GetComponent<PartyMenu>().ConfirmCharacter());
 		useItemMenu.SetActive(false);
 		nextMenu.SetActive(true);
 		useItemMenu.GetComponent<PartyMenu>().item = null;
@@ -462,20 +494,60 @@ public class Dungeon : MonoBehaviour {
 	
 	public void Ally (Character[] recruits) {
 		foreach (Character c in recruits) {
-			Party.AddPlayer(c);
+			if (Party.playerCount < 4) {
+	    		Party.AddPlayer(c);
+			} else {
+				Party.AddPlayer(c);
+			    replaceMember.SetActive(true);
+				eventSpace.SetActive(false);
+				nextMenu.SetActive(false);
+		        //menu.SetActive(false);
+	    		//largeMenuHides.SetActive(false);
+			    replaceMember.transform.Find("Member 1").gameObject.GetComponent<Button>().interactable = false;
+				return;
+			}
 		}
-		Resolve();
+		//Resolve();
+	}
+	
+	public void OpenSpecial (Special special) {
+		useItemMenu.SetActive(true);
+		partyMenu.SetActive(false);
+		//largeMenuHides.SetActive(false);
+	    useItemMenu.GetComponent<PartyMenu>().currentSpecial = special;
+		usingSpecial = true;
+	}
+	
+	public void SpecialSelects () {
+		Special special = useItemMenu.GetComponent<PartyMenu>().currentSpecial;
+		Party.UseSP(special.GetCost());
+		TimedMethod[] moves = special.UseSelects(useItemMenu.GetComponent<PartyMenu>().ConfirmCharacter());
+		//foreach (TimedMethod m in moves) {
+	        //methodQueue.Enqueue(m);
+		//}
+		//methodQueue.Enqueue(new TimedMethod(2, "EndTurn"));
+		useItemMenu.GetComponent<PartyMenu>().currentSpecial = null;
+		useItemMenu.SetActive(false);
+		nextMenu.SetActive(true);
+		if (isEvent) {
+			eventSpace.SetActive(true);
+		} else {
+			dungeonMaps.SetActive(true);
+		}
+		//largeMenuHides.SetActive(true);
+	}
+	
+	public void CloseRecruit () {
+		replaceMember.SetActive(false);
 	}
 	
 	public void SpendTime (int amount) {
 		Time.Increment(amount);
 	}
 	
-	//public void Shortcut (int number) {
-		//for (int i = 1; i <= number; i++) {
-			//Areas.Next();
-		//}
-	//}
+	public void Win () {
+	    SceneManager.LoadScene("Win");	
+	}
 	
 	public void Exit () {
 		SceneManager.LoadScene("Overworld");

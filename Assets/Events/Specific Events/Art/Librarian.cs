@@ -7,14 +7,6 @@ public class Librarian : Event {
 	public override void Enact () {
 		text = "You enter the building's library, and are immediately told to shush by the student librarian. The path forward is littered with"
 		    + "creaky wooden floorboards";
-		Event right = new Event();
-		right.text = "\"Exactly! There is some hope for the younger generation after all!\" The guest heals you for your troubles";
-		right.options1 = new LinkedList<TimedMethod>();
-		right.options1.AddLast(new TimedMethod(0, "Heal", new object[] {4}));
-		right.options1.AddLast(new TimedMethod("Resolve"));
-		right.optionText1 = "4 healing for party";
-		Event wrong = new BattleEvent(new Character[] {new Tenured()},
-    		"\"Wrong. Insolence towards your ancestors has grave consequences.\" The guest prepares for battle");
 		options1 = new LinkedList<TimedMethod>();
 	    optionText1 = "Walk carefully";
         if (new System.Random().Next(2) == 0) {

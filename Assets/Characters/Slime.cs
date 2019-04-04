@@ -34,12 +34,14 @@ public class Slime : Character {
 	public TimedMethod[] Heal() {
 		Heal(5);
 		return new TimedMethod[] {new TimedMethod(0, "AudioAfter", new object[] {"Heal", 20}),
-    		new TimedMethod(60, "Log", new object[] {ToString() + " is regenerating"})};
+    		new TimedMethod(60, "Log", new object[] {ToString() + " is regenerating"}),
+			new TimedMethod(0, "CharLogSprite", new object[] {"5", Party.enemySlot - 1, "healing", false})};
 	}
 	
 	public TimedMethod[] Creep() {
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " crept forward"}),
-		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"})};
+		    new TimedMethod(0, "Audio", new object[] {"Skip Turn"}),
+			new TimedMethod(0, "CharLogSprite", new object[] {"SKIP", Party.enemySlot - 1, "skip", false})};
 	}
 	
 	public override void Damage (int amount) {
@@ -55,6 +57,7 @@ public class Slime : Character {
 			splitted.SetGuard(guard);
 			splitted.SetCharge(charge);
 			splitted.SetQuirk(quirk.Clone());
+			splitted.GetQuirk().SetSelf(splitted);
 			Splitter castPassive = (Splitter) passive;
 			castPassive.split = true;
 		}
@@ -73,7 +76,8 @@ public class Slime : Character {
 	}
 	
 	public override string[] CSDescription () {
-		return new string[] {"Slime - abominations created by science. Or bad cooking",
+		return new string[] {"Slime - It's a slime, have you never played a roguelike rpg before?",
+            "It was created by science...or perhaps...bad cooking?",
 		    "They split every time hit it if it doesn't die, and we'll get slimed on top of it",
 			"We can use its slowness to our advantage, so try to set up and kill it at once"};
 	}

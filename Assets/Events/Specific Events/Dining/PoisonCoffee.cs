@@ -11,6 +11,7 @@ public class PoisonCoffee : Event {
 		success.text = "The coffee is perfectly fine. The suspicious person drank from his cup and immediately keeled over";
 		success.options1 = new LinkedList<TimedMethod>();
 		success.options1.AddLast(new TimedMethod(0, "StatusChange", new object[] {"Coffee", null}));
+		success.options1.AddLast(new TimedMethod("Resolve"));
 		success.optionText1 = "...";
 		Event failure = new Event();
 		failure.text = "The coffee was poisoned! The suspicious person drinks from their mug and readies pizzas";

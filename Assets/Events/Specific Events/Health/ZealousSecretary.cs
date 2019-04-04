@@ -5,7 +5,7 @@ public class ZealousSecretary : Event {
 	public ZealousSecretary () {}
 	
 	public override void Enact () {
-		text = "A secretary is still in the desk. You can barely see the person through flying papers. You hear shouts of \"Patient X's records\"";
+		text = "This desk still holds a secretary. You can barely see the person through flying papers. You hear shouts of \"Patient X's records\"";
 		Character[] fight = new Character[] {new SecurityHologram()};
 		fight[0].SetPassive(new ForceField(fight[0])); fight[0].GainEvasion(40); fight[0].GainDexterity(2);
 		options1 = new LinkedList<TimedMethod>();

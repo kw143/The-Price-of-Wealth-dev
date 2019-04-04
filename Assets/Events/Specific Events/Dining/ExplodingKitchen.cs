@@ -11,6 +11,7 @@ public class ExplodingKitchen : Event {
 		recruit.text = "Accept the Culinary Major?";
 		recruit.options1 = new LinkedList<TimedMethod>();
 		recruit.options1.AddLast(new TimedMethod(0, "Ally", new object[] {new Character[] {new CulinaryMajor()}}));
+		recruit.options1.AddLast(new TimedMethod("Resolve"));
 		recruit.optionText1 = "Yes";
 		recruit.options2 = new LinkedList<TimedMethod>();
 		recruit.options2.AddLast(new TimedMethod("Resolve"));
@@ -25,7 +26,6 @@ public class ExplodingKitchen : Event {
 		if (new System.Random().Next(3) == 0) {
 		    options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You only succeed in burning yourself", damage)}));
 		} else {
-			options1.AddLast(new TimedMethod(0, "Ally", new object[] {new Character[] {new CulinaryMajor()}}));
 			options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You direct the flow of the sink towards the stove, "
 		    	+ "Extinguishing the fire. The student manages to handle the other emergencies and offers to join your team", recruit)}));
 		}
@@ -46,7 +46,7 @@ public class ExplodingKitchen : Event {
 				    new StrengthPotion()}, "The other student has disappeared, but hey, free coffee?"))}));
 		} else {
 			options3.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("Without an engineer to fix the extremely intricate"
-			    + " device, it explode in your face, just like you were warned", damage)}));
+			    + " device, it exploded in your face, just like you were warned", damage)}));
 		}
 		options4 = new LinkedList<TimedMethod>();
 		optionText4 = "Save Yourself!";

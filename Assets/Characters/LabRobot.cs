@@ -22,15 +22,22 @@ public class LabRobot : Character {
 	}
 	
 	public TimedMethod[] Download() {
-		accuracy += 89; evasion += 30;
+		GainAccuracy(89); GainEvasion(25);
+		TimedMethod evadePart = new TimedMethod("Null");
+		if (!GetGooped()) {
+			evadePart = new TimedMethod(0, "CharLogSprite", new object[] {"25", Party.enemySlot - 1, "evasion", false});
+		}
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Wikipedia"}), new TimedMethod(60, "Log", new object[] {
-			ToString() + " downloaded relevant information. Accuracy and evasion way up"})};
+			ToString() + " downloaded relevant information. Accuracy and evasion way up"}),
+			new TimedMethod(0, "CharLogSprite", new object[] {"89", Party.enemySlot - 1, "accuracy", false}), evadePart};
 	}
 	
 	public TimedMethod[] Beam() {
 		Attacks.SetAudio("Fire Hit", 10);
+		TimedMethod defPart = new TimedMethod("Null");
 		if (Attacks.EvasionCheck(Party.GetPlayer(), GetAccuracy())) {
 			Party.GetPlayer().GainDefense(-1);
+			defPart = new TimedMethod(0, "CharLogSprite", new object[] {"-1", Party.playerSlot - 1, "defense", true});
 		}
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " fired a beam"}),
 		    new TimedMethod(0, "Audio", new object[] {"Laser Shot"}),
@@ -38,16 +45,17 @@ public class LabRobot : Character {
 	}
 	
 	public TimedMethod[] Slice() {
-		Attacks.SetAudio("Sword", 10);
+		Attacks.SetAudio("Sword", 6);
 		return new TimedMethod[] {new TimedMethod(60, "Log", new object[] {ToString() + " slashed"}),
     		new TimedMethod(0, "Audio", new object[] {"Big Swing"}),
 		    new TimedMethod(0, "StagnantAttack", new object[] {false, 7, 7, GetAccuracy(), true, true, false})};
 	}
 	
 	public TimedMethod[] Reinforce() {
-		defense++;
+		GainDefense(1);
 		return new TimedMethod[] {new TimedMethod(0, "Audio", new object[] {"Metal Hit"}),
-    		new TimedMethod(60, "Log", new object[] {ToString() + " reinforced itself. Defense + 1"})};
+    		new TimedMethod(60, "Log", new object[] {ToString() + " reinforced itself. Defense + 1"}),
+			new TimedMethod(0, "CharLogSprite", new object[] {"1", Party.enemySlot - 1, "defense", false})};
 	}
 	
 	public override void CreateDrops() {
@@ -64,7 +72,8 @@ public class LabRobot : Character {
 	}
 	
 	public override string[] CSDescription () {
-		return new string[] {"Lab Robot - Performs tasks like melt and cut through metal",
+		return new string[] {"Lab Robot - Robot being tested for the military",
+            "Preforms tasks like melting and cuting through metal",
 		    "They're also very fast and difficult to damage"};
 	}
 }

@@ -22,6 +22,8 @@ public class PartyMenu : MonoBehaviour {
 	public int active;
 	public Item item;
 	public Special currentSpecial;
+	public bool replacing;
+	public Dungeon dungeon;
 	
 	// Use this for initialization
 	void Start () {
@@ -83,6 +85,9 @@ public class PartyMenu : MonoBehaviour {
 		    enem4.interactable = false;	
 		}
 		SetActive(Party.GetActive());
+		if (replacing) {
+			swap.interactable = false;
+		}
 	}
 	
 	void OnDisable() {SetActive(1);}
@@ -98,8 +103,9 @@ public class PartyMenu : MonoBehaviour {
 		} else {
 			status.text = Party.GetEnemy(i - 5).StatusE();
 		}
-		if (i < 5 && (Party.members[i - 1].GetSpecial().usableOut || Party.members[i - 1].GetSupportSpecial().usableOut) && 
-		    Party.GetSP() >= Party.members[i-1].GetSpecial().GetCost()) {
+		if (i < 5 && ((Party.members[i - 1].GetSpecial().usableOut && 
+		    Party.GetSP() >= Party.members[i-1].GetSpecial().GetCost()) || (Party.members[i - 1].GetSupportSpecial().usableOut && 
+		        Party.GetSP() >= Party.members[i-1].GetSupportSpecial().GetCost()))) {
 			special.interactable = true;
 		} else {
 			special.interactable = false;
@@ -109,8 +115,11 @@ public class PartyMenu : MonoBehaviour {
 		} else {
 			kick.interactable = true;
 		}
+		if (replacing) {
+			swap.interactable = true;
+		}
 		if (item == null && currentSpecial == null) {
-		    if (i == Party.playerSlot || i >= 5 || Party.GetPlayer().GetGooped()) {
+		    if ((i == Party.playerSlot && !replacing) || i >= 5 || Party.GetPlayer().GetGooped()) {
 	    		swap.interactable = false;
     		} else {
 			    if (Party.members[i-1].GetAlive() && Party.members[i - 1].status.possessed == 0 && Party.members[i - 1].status.gooped == false) {	
@@ -139,21 +148,31 @@ public class PartyMenu : MonoBehaviour {
 	}
 	
 	public void Replace () {
-		Party.fullRecruit.SetPlayer(true);
-		Party.members[active - 1] = Party.fullRecruit;
+		Party.members[active - 1] = null;
+		Party.playerCount--;
+		Party.AddPlayer(Party.fullRecruit);
 		Party.latestRecruit = Party.fullRecruit;
 		Party.fullRecruit = null;
 	}
 	
 	public void Kick () {
 		Party.members[active - 1] = null;
+		Party.playerCount--;
 	}
 	
 	public void Special () {
 	    if (Party.members[active - 1].GetSpecial().usableOut && !Party.members[active - 1].GetSupportSpecial().usableOut) {
+			if (Party.members[active - 1].GetSpecial().selects) {
+				dungeon.OpenSpecial(Party.members[active - 1].GetSupportSpecial());
+				return;
+			}
 		    Party.members[active - 1].GetSpecial().UseOutOfCombat();
 			CloseParty();
 		} else if (!Party.members[active - 1].GetSpecial().usableOut && Party.members[active - 1].GetSupportSpecial().usableOut) {
+			if (Party.members[active - 1].GetSupportSpecial().selects) {
+				dungeon.OpenSpecial(Party.members[active - 1].GetSupportSpecial());
+				return;
+			}
 			Party.members[active - 1].GetSupportSpecial().UseOutOfCombat();
 			CloseParty();
 		} else {

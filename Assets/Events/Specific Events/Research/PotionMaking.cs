@@ -48,14 +48,14 @@ public class PotionMaking : Event {
 		options2 = new LinkedList<TimedMethod>();
 		options2.AddLast(new TimedMethod(0, "SpendTime", new object[] {3}));
 		if (Party.PartyContains(new MathMajor()) >= 0) {
-		options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You spend many practice attempts with water. "
+		options2.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You spend many practice attempts with water. "
     		+ "When you are finally ready, you look up to see" + Party.members[Party.PartyContains(new MathMajor())].ToString()
 		    + " already completed the task. You feel like you had your time wasted, but it turned out fine in the end", success)}));
 		} else if (new System.Random().Next(3) < 2) {
-            options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You spend many practice attempts with water. "
+            options2.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You spend many practice attempts with water. "
 			    + "When you are finally ready, you pour the solution", success)}));
 		} else {
-            options1.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You spend many practice attempts with water. "
+            options2.AddLast(new TimedMethod(0, "CauseEvent", new object[] {new TextEvent("You spend many practice attempts with water. "
 			    + "When you are finally ready, you pour the solution", failure)}));
 		}		
 		optionText2 = "Take time to practice first";
